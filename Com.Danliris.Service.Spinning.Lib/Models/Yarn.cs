@@ -1,9 +1,9 @@
-﻿using Com.Danliris.Service.Spinning.Lib.Helpers;
+﻿using Com.Danliris.Service.Spinning.Lib.Services;
 using Com.Moonlay.Models;
-using System;
+using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
+using System.Linq;
 
 namespace Com.Danliris.Service.Spinning.Lib.Models
 {
@@ -14,7 +14,10 @@ namespace Com.Danliris.Service.Spinning.Lib.Models
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            return new List<ValidationResult>();
+            YarnService service = validationContext.GetService<YarnService>();
+
+            if (service.DbSet.Count(r => r.Id != this.Id && r.Name.Equals(this.Name) && r._IsDeleted.Equals(false)) > 0)
+                yield return new ValidationResult("Nama Benang sudah ada", new List<string> { "Name" });
         }
     }
 }
