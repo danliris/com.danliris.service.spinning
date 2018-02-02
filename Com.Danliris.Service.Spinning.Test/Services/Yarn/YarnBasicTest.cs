@@ -10,8 +10,8 @@ namespace Com.Danliris.Service.Spinning.Test.Service.Yarn
     [Collection("ServiceProviderFixture collection")]
     public class YarnBasicTest : BasicServiceTest<SpinningDbContext, YarnService, Models.Yarn>
     {
-        private static readonly string[] createAttrAssertions = { "Name", "Yarn" };
-        private static readonly string[] updateAttrAssertions = { "Name", "Yarn" };
+        private static readonly string[] createAttrAssertions = { };
+        private static readonly string[] updateAttrAssertions = { };
         private static readonly string[] existAttrCriteria = { };
 
         public YarnBasicTest(ServiceProviderFixture fixture) : base(fixture, createAttrAssertions, updateAttrAssertions, existAttrCriteria)
@@ -20,12 +20,10 @@ namespace Com.Danliris.Service.Spinning.Test.Service.Yarn
 
         public override void EmptyCreateModel(Models.Yarn model)
         {
-            model.Name = string.Empty;
         }
 
         public override void EmptyUpdateModel(Models.Yarn model)
         {
-            model.Name = string.Empty;
         }
 
         public override Models.Yarn GenerateTestModel()
