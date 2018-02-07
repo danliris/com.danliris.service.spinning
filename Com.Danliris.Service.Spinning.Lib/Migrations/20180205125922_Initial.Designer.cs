@@ -11,14 +11,14 @@ using System;
 namespace Com.Danliris.Service.Spinning.Lib.Migrations
 {
     [DbContext(typeof(SpinningDbContext))]
-    [Migration("20180201112558_Initial")]
+    [Migration("20180205125922_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.0.0-rtm-26452")
+                .HasAnnotation("ProductVersion", "2.0.1-rtm-125")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Com.Danliris.Service.Spinning.Lib.Models.Yarn", b =>
@@ -32,6 +32,12 @@ namespace Com.Danliris.Service.Spinning.Lib.Migrations
                         .HasMaxLength(100);
 
                     b.Property<string>("Name")
+                        .HasMaxLength(500);
+
+                    b.Property<decimal>("Ne")
+                        .HasColumnType("decimal(10, 2)");
+
+                    b.Property<string>("Remark")
                         .HasMaxLength(500);
 
                     b.Property<string>("_CreatedAgent")
