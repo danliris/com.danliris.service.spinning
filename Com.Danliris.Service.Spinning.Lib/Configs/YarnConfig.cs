@@ -13,6 +13,8 @@ namespace Com.Danliris.Service.Spinning.Lib.Configs
         {
             builder.Property(c => c.Code).HasMaxLength(100);
             builder.Property(c => c.Name).HasMaxLength(500);
+            builder.Property(c => c.Ne).HasColumnType("decimal(10, 2)");
+            builder.Property(c => c.Remark).HasMaxLength(500);
         }
     }
 }

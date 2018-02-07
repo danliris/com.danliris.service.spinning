@@ -25,13 +25,13 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
 
             List<string> SearchAttributes = new List<string>()
                 {
-                    "Name"
+                    "Code", "Name", "Ne"
                 };
             Query = ConfigureSearch(Query, SearchAttributes, Keyword);
 
             List<string> SelectedFields = new List<string>()
                 {
-                    "Id", "Code", "Name"
+                    "Id", "Code", "Name", "Ne", "Remark"
                 };
             Query = Query
                 .Select(b => new Yarn
@@ -39,6 +39,8 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
                     Id = b.Id,
                     Code = b.Code,
                     Name = b.Name,
+                    Ne = b.Ne,
+                    Remark = b.Remark,
                 });
 
             Dictionary<string, string> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Filter);
