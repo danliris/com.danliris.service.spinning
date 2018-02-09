@@ -37,7 +37,8 @@ namespace Com.Danliris.Service.Spinning.WebApi
                 });
 
             services
-                .AddTransient<YarnService>();
+                .AddTransient<YarnService>()
+                .AddTransient<YarnOutputProductionService>();
 
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddIdentityServerAuthentication(options =>
