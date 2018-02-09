@@ -5,11 +5,9 @@ using System.Linq;
 using Newtonsoft.Json;
 using Com.Danliris.Service.Spinning.Lib.Helpers;
 using System.Linq.Dynamic.Core;
-using System.Reflection;
 using Com.Moonlay.NetCore.Lib;
 using Com.Danliris.Service.Spinning.Lib.ViewModels;
 using Com.Danliris.Service.Spinning.Lib.Interfaces;
-using Com.Danliris.Service.Spinning.Lib;
 
 namespace Com.Danliris.Service.Spinning.Lib.Services
 {

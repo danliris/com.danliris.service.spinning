@@ -1,8 +1,5 @@
 ﻿using Com.Danliris.Service.Spinning.Lib.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Com.Danliris.Service.Spinning.Lib.Configs

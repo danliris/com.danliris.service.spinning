@@ -11,7 +11,7 @@ using System;
 namespace Com.Danliris.Service.Spinning.Lib.Migrations
 {
     [DbContext(typeof(SpinningDbContext))]
-    [Migration("20180205125922_Initial")]
+    [Migration("20180208083407_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,8 +34,7 @@ namespace Com.Danliris.Service.Spinning.Lib.Migrations
                     b.Property<string>("Name")
                         .HasMaxLength(500);
 
-                    b.Property<decimal>("Ne")
-                        .HasColumnType("decimal(10, 2)");
+                    b.Property<double>("Ne");
 
                     b.Property<string>("Remark")
                         .HasMaxLength(500);

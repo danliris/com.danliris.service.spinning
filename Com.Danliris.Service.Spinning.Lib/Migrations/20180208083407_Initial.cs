@@ -18,7 +18,7 @@ namespace Com.Danliris.Service.Spinning.Lib.Migrations
                     Active = table.Column<bool>(nullable: false),
                     Code = table.Column<string>(maxLength: 100, nullable: true),
                     Name = table.Column<string>(maxLength: 500, nullable: true),
-                    Ne = table.Column<decimal>(type: "decimal(10, 2)", nullable: false),
+                    Ne = table.Column<double>(nullable: false),
                     Remark = table.Column<string>(maxLength: 500, nullable: true),
                     _CreatedAgent = table.Column<string>(maxLength: 255, nullable: false),
                     _CreatedBy = table.Column<string>(maxLength: 255, nullable: false),

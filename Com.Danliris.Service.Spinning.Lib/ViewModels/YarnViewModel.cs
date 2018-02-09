@@ -8,7 +8,7 @@ namespace Com.Danliris.Service.Spinning.Lib.ViewModels
     {
         public string Code { get; set; }
         public string Name { get; set; }
-        public decimal Ne { get; set; }
+        public double Ne { get; set; }
         public string Remark { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

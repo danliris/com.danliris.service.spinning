@@ -15,12 +15,14 @@ namespace Com.Danliris.Service.Spinning.Lib
         }
 
         public DbSet<Yarn> Yarns { get; set; }
+        public DbSet<YarnOutputProduction> YarnOutputProductions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new YarnConfig());
+            modelBuilder.ApplyConfiguration(new YarnOutputProductionConfig());
         }
     }
 }
