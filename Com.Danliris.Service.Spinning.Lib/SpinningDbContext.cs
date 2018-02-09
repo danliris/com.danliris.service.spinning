@@ -18,6 +18,8 @@ namespace Com.Danliris.Service.Spinning.Lib
         public DbSet<LotYarn> LotYarns { get; set; }
         public DbSet<SpinningInputProduction> SpinningInputProductions { get; set; }
         public DbSet<SpinningInputProduction_InputDetails> SpinningInputProduction_InputDetails { get; set; }
+        public DbSet<YarnOutputProduction> YarnOutputProductions { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -27,6 +29,8 @@ namespace Com.Danliris.Service.Spinning.Lib
             modelBuilder.ApplyConfiguration(new LotYarnConfig());
             modelBuilder.ApplyConfiguration(new SpinningInputProductionConfig());
             modelBuilder.ApplyConfiguration(new SpinningInputProduction_InputDetailsServiceConfig());
+            modelBuilder.ApplyConfiguration(new YarnOutputProductionConfig());
+
         }
     }
 }

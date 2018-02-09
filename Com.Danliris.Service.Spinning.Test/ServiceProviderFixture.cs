@@ -14,7 +14,7 @@ namespace Com.Danliris.Service.Spinning.Test
         public ServiceProviderFixture()
         {
             /* For unit test by local machine (using localdb) */
-            // string connectionString = "Server=(localdb)\\mssqllocaldb;Database=com.danliris.db.spinning.test;Trusted_Connection=True;";
+            //string connectionString = "Server=(localdb)\\mssqllocaldb;Database=com.danliris.db.spinning.test;Trusted_Connection=True;";
 
             /* For unit test by Travis CI (using docker container mssql) */
             string connectionString = "Server=localhost,1401;Database=com.danliris.db.spinning.test;User=sa;password=Standar123;MultipleActiveResultSets=true;";
@@ -26,7 +26,9 @@ namespace Com.Danliris.Service.Spinning.Test
                     options.UseSqlServer(connectionString);
                 }, ServiceLifetime.Transient)
                 .AddTransient<YarnService>(provider => new YarnService(provider))
+                .AddTransient<YarnOutputProductionService>(provider => new YarnOutputProductionService(provider))
                 .AddTransient<YarnServiceDataUtil>()
+                .AddTransient<YarnOutputProductionServiceDataUtil>()
                 .BuildServiceProvider();
 
             SpinningDbContext dbContext = ServiceProvider.GetService<SpinningDbContext>();

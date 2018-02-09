@@ -11,6 +11,7 @@ namespace Com.Danliris.Service.Spinning.Lib.Models
         public String Code { get; set; }
         public int Counter { get; set; }
         public int Hash { get; set; }
+        public int test { get; set; }
         public int SpinningInputProductionId { get; set; }
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

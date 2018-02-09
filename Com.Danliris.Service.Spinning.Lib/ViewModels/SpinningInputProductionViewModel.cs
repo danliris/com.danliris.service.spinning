@@ -23,6 +23,7 @@ namespace Com.Danliris.Service.Spinning.Lib.ViewModels
             public String Code { get; set; }
             public int Counter { get; set; } 
             public int Hash { get; set; }
+
         }
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
