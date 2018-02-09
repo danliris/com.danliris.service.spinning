@@ -61,7 +61,6 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
                 model.Code = CodeGenerator.GenerateCode();
             }
             while (this.DbSet.Any(d => d.Code.Equals(model.Code)));
-
             base.OnCreating(model);
         }
 
