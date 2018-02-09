@@ -37,7 +37,10 @@ namespace Com.Danliris.Service.Spinning.WebApi
                 });
 
             services
-                .AddTransient<YarnService>();
+                .AddTransient<YarnService>()
+                .AddTransient<LotYarnService>()
+                .AddTransient<SpinningInputProductionService>()
+                .AddTransient<SpinningInputProduction_InputDetailsService>();
 
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddIdentityServerAuthentication(options =>
