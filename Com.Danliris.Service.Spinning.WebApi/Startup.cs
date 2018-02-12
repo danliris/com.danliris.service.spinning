@@ -24,8 +24,8 @@ namespace Com.Danliris.Service.Spinning.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //string connectionString = Configuration.GetConnectionString("DefaultConnection") ?? Configuration["DefaultConnection"];
-            string connectionString = "Server=(localdb)\\mssqllocaldb;Database=com.danliris.db.spinning;Trusted_Connection=True;";
+            string connectionString = Configuration.GetConnectionString("DefaultConnection") ?? Configuration["DefaultConnection"];
+            //string connectionString = "Server=(localdb)\\mssqllocaldb;Database=com.danliris.db.spinning;Trusted_Connection=True;";
 
             services
                 .AddDbContext<SpinningDbContext>(options => options.UseSqlServer(connectionString))
