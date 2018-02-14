@@ -67,7 +67,7 @@ namespace Com.Danliris.Service.Spinning.Lib.ViewModels
 
             if (this.YarnOutputItems == null || this.YarnOutputItems.Count.Equals(0))
             {
-                yield return new ValidationResult("Items harus diisi", new List<string> { "Items" });
+                yield return new ValidationResult("Detail Benang harus diisi", new List<string> { "YarnOutputItems" });
             }
             else
             {
@@ -114,7 +114,7 @@ namespace Com.Danliris.Service.Spinning.Lib.ViewModels
 
             if (Count > 0)
             {
-                yield return new ValidationResult(yarnOutputItemsError, new List<string> { "Items" });
+                yield return new ValidationResult(yarnOutputItemsError, new List<string> { "YarnOutputItems" });
             }
         }
     }
