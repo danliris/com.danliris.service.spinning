@@ -8,23 +8,25 @@ namespace Com.Danliris.Service.Spinning.Lib.ViewModels
     public class SpinningInputProductionViewModel : BasicViewModel, IValidatableObject
     {
         public string NomorInputProduksi { get; set; }
-        public int UnitId { get; set; }
+        public string UnitId { get; set; }
         public string UnitName { get; set; }
-        public DateTime tanggal { get; set; }
+        public DateTime Date { get; set; }
         public string Shift { get; set; }
         public int YarnId { get; set; }
         public string YarnName { get; set; }
         public string Lot { get; set; }
-        public List<InputModel> Input { get; set; }
-        public class InputModel
-        {
-            public int Id{ get; set; }
-            public int SpinningInputProductionId { get; set; }
-            public String Code { get; set; }
-            public int Counter { get; set; } 
-            public int Hash { get; set; }
+        public string MachineId { get; set; }
+        public string MachineName { get; set; }
+        public double Counter { get; set; }
+        public double Hank { get; set; }
+        public virtual List<Input> input { get; set; }
 
+        public class Input
+        {
+            public double Counter { get; set; }
+            public double Hank { get; set; }
         }
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (string.IsNullOrWhiteSpace(this.Lot))

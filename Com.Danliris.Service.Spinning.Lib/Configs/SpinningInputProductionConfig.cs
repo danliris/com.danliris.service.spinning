@@ -14,10 +14,6 @@ namespace Com.Danliris.Service.Spinning.Lib.Configs
         {
             builder.Property(c => c.NomorInputProduksi).HasMaxLength(100);
 
-            builder
-            .HasMany(m => m.Input);
-
-
         }
     }
 }

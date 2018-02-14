@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Com.Danliris.Service.Spinning.Lib.Migrations
 {
-    public partial class Initital : Migration
+    public partial class initial3 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -50,10 +50,15 @@ namespace Com.Danliris.Service.Spinning.Lib.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Active = table.Column<bool>(nullable: false),
+                    Counter = table.Column<double>(nullable: false),
+                    Date = table.Column<DateTime>(nullable: false),
+                    Hank = table.Column<double>(nullable: false),
                     Lot = table.Column<string>(nullable: true),
+                    MachineId = table.Column<string>(nullable: true),
+                    MachineName = table.Column<string>(nullable: true),
                     NomorInputProduksi = table.Column<string>(maxLength: 100, nullable: true),
                     Shift = table.Column<string>(nullable: true),
-                    UnitId = table.Column<int>(nullable: false),
+                    UnitId = table.Column<string>(nullable: true),
                     UnitName = table.Column<string>(nullable: true),
                     YarnId = table.Column<int>(nullable: false),
                     YarnName = table.Column<string>(nullable: true),
@@ -66,8 +71,7 @@ namespace Com.Danliris.Service.Spinning.Lib.Migrations
                     _IsDeleted = table.Column<bool>(nullable: false),
                     _LastModifiedAgent = table.Column<string>(maxLength: 255, nullable: false),
                     _LastModifiedBy = table.Column<string>(maxLength: 255, nullable: false),
-                    _LastModifiedUtc = table.Column<DateTime>(nullable: false),
-                    tanggal = table.Column<DateTime>(nullable: false)
+                    _LastModifiedUtc = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -142,45 +146,6 @@ namespace Com.Danliris.Service.Spinning.Lib.Migrations
                 {
                     table.PrimaryKey("PK_Yarns", x => x.Id);
                 });
-
-            migrationBuilder.CreateTable(
-                name: "SpinningInputProduction_InputDetails",
-                columns: table => new
-                {
-                    Id = table.Column<int>(maxLength: 100, nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Active = table.Column<bool>(nullable: false),
-                    Code = table.Column<string>(nullable: true),
-                    Counter = table.Column<int>(nullable: false),
-                    Hash = table.Column<int>(nullable: false),
-                    SpinningInputProductionId = table.Column<int>(nullable: false),
-                    _CreatedAgent = table.Column<string>(maxLength: 255, nullable: false),
-                    _CreatedBy = table.Column<string>(maxLength: 255, nullable: false),
-                    _CreatedUtc = table.Column<DateTime>(nullable: false),
-                    _DeletedAgent = table.Column<string>(maxLength: 255, nullable: false),
-                    _DeletedBy = table.Column<string>(maxLength: 255, nullable: false),
-                    _DeletedUtc = table.Column<DateTime>(nullable: false),
-                    _IsDeleted = table.Column<bool>(nullable: false),
-                    _LastModifiedAgent = table.Column<string>(maxLength: 255, nullable: false),
-                    _LastModifiedBy = table.Column<string>(maxLength: 255, nullable: false),
-                    _LastModifiedUtc = table.Column<DateTime>(nullable: false),
-                    test = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SpinningInputProduction_InputDetails", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SpinningInputProduction_InputDetails_SpinningInputProductions_SpinningInputProductionId",
-                        column: x => x.SpinningInputProductionId,
-                        principalTable: "SpinningInputProductions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SpinningInputProduction_InputDetails_SpinningInputProductionId",
-                table: "SpinningInputProduction_InputDetails",
-                column: "SpinningInputProductionId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -189,16 +154,13 @@ namespace Com.Danliris.Service.Spinning.Lib.Migrations
                 name: "LotYarns");
 
             migrationBuilder.DropTable(
-                name: "SpinningInputProduction_InputDetails");
+                name: "SpinningInputProductions");
 
             migrationBuilder.DropTable(
                 name: "YarnOutputProductions");
 
             migrationBuilder.DropTable(
                 name: "Yarns");
-
-            migrationBuilder.DropTable(
-                name: "SpinningInputProductions");
         }
     }
 }
