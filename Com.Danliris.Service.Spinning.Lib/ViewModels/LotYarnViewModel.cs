@@ -1,6 +1,7 @@
 ﻿using Com.Danliris.Service.Spinning.Lib.Helpers;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
+using System;
 
 namespace Com.Danliris.Service.Spinning.Lib.ViewModels
 {
@@ -8,6 +9,8 @@ namespace Com.Danliris.Service.Spinning.Lib.ViewModels
     {
         public string Code { get; set; }
         public string Lot { get; set; }
+        public string Remark { get; set; }
+        public DateTime? Date { get; set; }
         public YarnVM Yarn { get; set; }
         public UnitVM Unit { get; set; }
         public MachineVM Machine { get; set; }
@@ -34,6 +37,10 @@ namespace Com.Danliris.Service.Spinning.Lib.ViewModels
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
+            if (this.Date == null || this.Date == DateTime.MinValue)
+                yield return new ValidationResult("Tanggal harus diisi", new List<string> { "Date" });
+            else if (this.Date > DateTime.Today)
+                yield return new ValidationResult("Tanggal tidak boleh lebih besar dari sekarang", new List<string> { "Date" });
             if (string.IsNullOrWhiteSpace(this.Lot))
                 yield return new ValidationResult("Lot Benang harus diisi", new List<string> { "Lot" });
             if (this.Yarn == null || this.Yarn.Id == 0)

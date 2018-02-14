@@ -1,6 +1,7 @@
 ﻿using Com.Danliris.Service.Spinning.Lib.Services;
 using Com.Moonlay.Models;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace Com.Danliris.Service.Spinning.Lib.Models
     public class LotYarn : StandardEntity, IValidatableObject
     {
         public string Code { get; set; }
+        public DateTime Date { get; set; }
         public string Lot { get; set; }
         public int YarnId { get; set; }
         public string YarnCode { get; set; }
@@ -20,6 +22,7 @@ namespace Com.Danliris.Service.Spinning.Lib.Models
         public string MachineId { get; set; }
         public string MachineCode { get; set; }
         public string MachineName { get; set; }
+        public string Remark { get; set; }
 
 
 
