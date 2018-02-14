@@ -10,11 +10,16 @@ namespace Com.Danliris.Service.Spinning.Lib.Models
     public class LotYarn : StandardEntity, IValidatableObject
     {
         public string Code { get; set; }
-        public string Name { get; set; }
         public string Lot { get; set; }
         public int YarnId { get; set; }
-        public int UnitId { get; set; }
-        public virtual Yarn Yarn { get; set; }
+        public string YarnCode { get; set; }
+        public string YarnName { get; set; }
+        public string UnitId { get; set; }
+        public string UnitCode { get; set; }
+        public string UnitName { get; set; }
+        public string MachineId { get; set; }
+        public string MachineCode { get; set; }
+        public string MachineName { get; set; }
 
 
 
@@ -22,8 +27,8 @@ namespace Com.Danliris.Service.Spinning.Lib.Models
         {
             LotYarnService service = validationContext.GetService<LotYarnService>();
 
-            if (service.DbSet.Count(r => r.Id != this.Id && r.Name.Equals(this.Name) && r._IsDeleted.Equals(false)) > 0)
-                yield return new ValidationResult("Nama lot Benang sudah ada", new List<string> { "Name" });
+            if (service.DbSet.Count(r => r.Id != this.Id && r.Lot.Equals(this.Lot) && r._IsDeleted.Equals(false)) > 0)
+                yield return new ValidationResult("Nama lot Benang sudah ada", new List<string> { "Lot" });
         }
     }
 }

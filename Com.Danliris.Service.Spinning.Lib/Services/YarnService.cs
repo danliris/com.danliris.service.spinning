@@ -23,7 +23,7 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
 
             List<string> SearchAttributes = new List<string>()
                 {
-                    "Code", "Name", "Ne"
+                    "Code", "Name"
                 };
             Query = ConfigureSearch(Query, SearchAttributes, Keyword);
 

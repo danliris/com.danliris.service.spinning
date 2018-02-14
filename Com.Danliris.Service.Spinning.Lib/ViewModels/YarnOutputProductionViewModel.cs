@@ -8,18 +8,36 @@ namespace Com.Danliris.Service.Spinning.Lib.ViewModels
     public class YarnOutputProductionViewModel : BasicViewModel, IValidatableObject
     {
         public string Code { get; set; }
-        public string SpinningId { get; set; }
-        public string Spinning { get; set; }
+        public SpinningVm Spinning { get; set; }
+        public MachineVM Machine { get; set; }
+        public LotYarnVM LotYarn { get; set; }
+        public YarnVM Yarn { get; set; }
+        public class SpinningVm
+        {
+            public string _id { get; set; }
+            public string code { get; set; }
+            public string name { get; set; }
+        }
+        public class MachineVM
+        {
+            public string _id { get; set; }
+            public string code { get; set; }
+            public string name { get; set; }
+        }
+        public class LotYarnVM
+        {
+            public int? Id { get; set; }
+            public string Code { get; set; }
+            public string Lot { get; set; }
+        }
+        public class YarnVM
+        {
+            public int? Id { get; set; }
+            public string Code { get; set; }
+            public string Name { get; set; }
+        }
         public DateTime? Date { get; set; }
         public string Shift { get; set; }
-        public string MachineId { get; set; }
-        public string MachineName { get; set; }
-        public int? YarnId { get; set; }
-        public string YarnCode { get; set; }
-        public string YarnName { get; set; }
-        public int? LotYarnId { get; set; }
-        public string LotYarnName { get; set; }
-        public string LotYarnCode { get; set; }
         public double? YarnWeightPerCone { get; set; }
         public double? GoodOutput { get; set; }
         public double? BadOutput { get; set; }
@@ -27,7 +45,7 @@ namespace Com.Danliris.Service.Spinning.Lib.ViewModels
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (string.IsNullOrWhiteSpace(this.SpinningId))
+            if (this.Spinning == null || string.IsNullOrWhiteSpace(this.Spinning._id))
                 yield return new ValidationResult("Nama Spinning harus diisi", new List<string> { "SpinningId" });
             if (this.Date == null || this.Date == DateTime.MinValue)
                 yield return new ValidationResult("Tanggal harus diisi", new List<string> { "Date" });
@@ -35,15 +53,11 @@ namespace Com.Danliris.Service.Spinning.Lib.ViewModels
                 yield return new ValidationResult("Tanggal tidak boleh lebih besar dari sekarang", new List<string> { "Date" });
             if (string.IsNullOrWhiteSpace(this.Shift))
                 yield return new ValidationResult("Shift tidak boleh kosong", new List<string> { "Shift" });
-            if (string.IsNullOrWhiteSpace(this.MachineId))
+            if (this.Machine == null || string.IsNullOrWhiteSpace(this.Machine._id))
                 yield return new ValidationResult("Mesin harus diisi", new List<string> { "MachineId" });
-            if (this.YarnId <= 0)
+            if (this.Yarn == null || this.Yarn.Id == 0)
                 yield return new ValidationResult("Benang harus diisi", new List<string> { "YarnId" });
-            else if (this.YarnId == null)
-                yield return new ValidationResult("Benang harus diisi", new List<string> { "YarnId" });
-            if (this.LotYarnId <= 0)
-                yield return new ValidationResult("Lot Benang harus diisi", new List<string> { "LotYarnId" });
-            else if (this.LotYarnId == null)
+            if (this.LotYarn == null || this.LotYarn.Id == 0)
                 yield return new ValidationResult("Lot Benang harus diisi", new List<string> { "LotYarnId" });
             if (this.YarnWeightPerCone <= 0)
                 yield return new ValidationResult("Berat per Cone harus lebih besar dari 0", new List<string> { "YarnWeightPerCone" });

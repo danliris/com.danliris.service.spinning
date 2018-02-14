@@ -33,13 +33,31 @@ namespace Com.Danliris.Service.Spinning.Lib.Migrations
                     b.Property<string>("Lot")
                         .HasMaxLength(500);
 
-                    b.Property<string>("Name")
-                        .HasMaxLength(500);
+                    b.Property<string>("MachineCode")
+                        .HasMaxLength(100);
 
-                    b.Property<int>("UnitId")
+                    b.Property<string>("MachineId")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("MachineName")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("UnitCode")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("UnitId")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("UnitName")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("YarnCode")
                         .HasMaxLength(100);
 
                     b.Property<int>("YarnId");
+
+                    b.Property<string>("YarnName")
+                        .HasMaxLength(100);
 
                     b.Property<string>("_CreatedAgent")
                         .IsRequired()
@@ -74,8 +92,6 @@ namespace Com.Danliris.Service.Spinning.Lib.Migrations
                     b.Property<DateTime>("_LastModifiedUtc");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("YarnId");
 
                     b.ToTable("LotYarns");
                 });
@@ -272,12 +288,14 @@ namespace Com.Danliris.Service.Spinning.Lib.Migrations
                     b.Property<double>("GoodOutput");
 
                     b.Property<string>("LotYarnCode")
-                        .HasMaxLength(10);
+                        .HasMaxLength(100);
 
-                    b.Property<int>("LotYarnId")
-                        .HasMaxLength(500);
+                    b.Property<int>("LotYarnId");
 
                     b.Property<string>("LotYarnName")
+                        .HasMaxLength(500);
+
+                    b.Property<string>("MachineCode")
                         .HasMaxLength(500);
 
                     b.Property<string>("MachineId")
@@ -289,16 +307,19 @@ namespace Com.Danliris.Service.Spinning.Lib.Migrations
                     b.Property<string>("Shift")
                         .HasMaxLength(500);
 
-                    b.Property<string>("Spinning")
+                    b.Property<string>("SpinningCode")
                         .HasMaxLength(500);
 
-                    b.Property<string>("SpinningId");
+                    b.Property<string>("SpinningId")
+                        .HasMaxLength(500);
+
+                    b.Property<string>("SpinningName")
+                        .HasMaxLength(500);
 
                     b.Property<string>("YarnCode")
                         .HasMaxLength(100);
 
-                    b.Property<int>("YarnId")
-                        .HasMaxLength(500);
+                    b.Property<int>("YarnId");
 
                     b.Property<string>("YarnName")
                         .HasMaxLength(500);
@@ -340,14 +361,6 @@ namespace Com.Danliris.Service.Spinning.Lib.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("YarnOutputProductions");
-                });
-
-            modelBuilder.Entity("Com.Danliris.Service.Spinning.Lib.Models.LotYarn", b =>
-                {
-                    b.HasOne("Com.Danliris.Service.Spinning.Lib.Models.Yarn", "Yarn")
-                        .WithMany()
-                        .HasForeignKey("YarnId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Com.Danliris.Service.Spinning.Lib.Models.SpinningInputProduction_InputDetails", b =>

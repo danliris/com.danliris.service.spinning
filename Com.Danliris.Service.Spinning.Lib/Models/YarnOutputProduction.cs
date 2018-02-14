@@ -12,10 +12,12 @@ namespace Com.Danliris.Service.Spinning.Lib.Models
     {
         public string Code { get; set; }
         public string SpinningId { get; set; }
-        public string Spinning { get; set; }
+        public string SpinningCode { get; set; }
+        public string SpinningName { get; set; }
         public DateTime Date { get; set; }
         public string Shift { get; set; }
         public string MachineId { get; set; }
+        public string MachineCode { get; set; }
         public string MachineName { get; set; }
         public int YarnId { get; set; }
         public string YarnCode { get; set; }
@@ -30,9 +32,7 @@ namespace Com.Danliris.Service.Spinning.Lib.Models
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            YarnOutputProductionService service = validationContext.GetService<YarnOutputProductionService>();
-            if (service.DbSet.Count(r => r.Id != this.Id && r.Code.Equals(this.Code) && r._IsDeleted.Equals(false)) > 0)
-                yield return new ValidationResult("Code duplicat", new List<string> { "Code" });
+            return new List<ValidationResult>();
         }
     }
 }

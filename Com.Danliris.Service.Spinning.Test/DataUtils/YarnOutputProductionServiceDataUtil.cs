@@ -40,7 +40,7 @@ namespace Com.Danliris.Service.Spinning.Test.DataUtils
                     MachineId = "test",
                     MachineName = "Test",
                     Shift = "Test",
-                    Spinning = "Tetst",
+                    SpinningName = "Tetst",
                     SpinningId = "Test",
                     YarnCode = "Test",
                     YarnId = 1,

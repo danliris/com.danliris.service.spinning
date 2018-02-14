@@ -23,22 +23,18 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
         public override Tuple<List<LotYarn>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
         {
             IQueryable<LotYarn> Query = this.DbContext.LotYarns;
-            Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Order);
 
-            if (Keyword != null)
+            List<string> SearchAttributes = new List<string>()
             {
-                List<string> SearchAttributes = new List<string>()
-                {
-                    "Name"
-                };
+                "Lot", "UnitName", "YarnName", "MachineName"
+            };
 
-                Query = ConfigureSearch(Query, SearchAttributes, Keyword);
-            }
+            Query = ConfigureSearch(Query, SearchAttributes, Keyword);
 
             /* Const Select */
             List<string> SelectedFields = new List<string>()
             {
-                "_id","Code","Name" ,"Unit"
+                "Id", "Code", "Lot", "Unit", "Yarn", "Machine"
             };
 
             Query = Query
@@ -46,60 +42,32 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
                 {
                     Id = o.Id,
                     Code = o.Code,
-                    Name = o.Name,
+                    Lot = o.Lot,
+                    UnitId = o.UnitId,
+                    UnitCode = o.UnitCode,
+                    UnitName = o.UnitName,
                     YarnId = o.YarnId,
-                    Yarn = new Yarn
-                    {
-                        Id = o.Yarn.Id,
-                        Code = o.Yarn.Code,
-                        Name = o.Yarn.Name,
-                    },
-     
+                    YarnCode = o.YarnCode,
+                    YarnName = o.YarnName,
+                    MachineId = o.MachineId,
+                    MachineCode = o.MachineCode,
+                    MachineName = o.MachineName
                 });
 
             /* Order */
-            if (OrderDictionary.Count.Equals(0))
-            {
-                OrderDictionary.Add("_updatedDate", General.DESCENDING);
+            Dictionary<string, string> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Filter);
+            Query = ConfigureFilter(Query, FilterDictionary);
 
-                Query = Query.OrderByDescending(b => b._LastModifiedUtc); /* Default Order */
-            }
-            else
-            {
-                string Key = OrderDictionary.Keys.First();
-                string OrderType = OrderDictionary[Key];
-                string TransformKey = General.TransformOrderBy(Key);
-
-                BindingFlags IgnoreCase = BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance;
-
-                Query = OrderType.Equals(General.ASCENDING) ?
-                    Query.OrderBy(b => b.GetType().GetProperty(TransformKey, IgnoreCase).GetValue(b)) :
-                    Query.OrderByDescending(b => b.GetType().GetProperty(TransformKey, IgnoreCase).GetValue(b));
-            }
+            Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Order);
+            Query = ConfigureOrder(Query, OrderDictionary);
 
             /* Pagination */
             Pageable<LotYarn> pageable = new Pageable<LotYarn>(Query, Page - 1, Size);
             List<LotYarn> Data = pageable.Data.ToList<LotYarn>();
-
             int TotalData = pageable.TotalCount;
 
             return Tuple.Create(Data, TotalData, OrderDictionary, SelectedFields);
         }
-
-        //public async Task<List<LotYarn>> ReadModelOnUnit(int Id)
-        //{
-        //    return await this.DbSet
-        //        .Where(m => m.YarnId.Equals(Id) && m._IsDeleted == false)
-        //        .ToListAsync();
-        //}
-
-        //public override async Task<LotYarn> ReadModelById(int Id)
-        //{
-        //    return await this.DbSet
-        //        .Where(m => m.Id.Equals(Id) && m._IsDeleted == false)
-        //        .Include(m => m.YarnId)
-        //        .FirstOrDefaultAsync();
-        //}
 
         public override void OnCreating(LotYarn model)
         {
@@ -116,6 +84,18 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
         {
             LotYarnViewModel viewModel = new LotYarnViewModel();
             PropertyCopier<LotYarn, LotYarnViewModel>.Copy(model, viewModel);
+            viewModel.Yarn = new LotYarnViewModel.YarnVM();
+            viewModel.Yarn.Id = model.YarnId;
+            viewModel.Yarn.Code = model.YarnCode;
+            viewModel.Yarn.Name = model.YarnName;
+            viewModel.Machine = new LotYarnViewModel.MachineVM();
+            viewModel.Machine._id = model.MachineId;
+            viewModel.Machine.code = model.MachineCode;
+            viewModel.Machine.name = model.MachineName;
+            viewModel.Unit = new LotYarnViewModel.UnitVM();
+            viewModel.Unit._id = model.UnitId;
+            viewModel.Unit.code = model.UnitCode;
+            viewModel.Unit.name = model.UnitName;
             return viewModel;
         }
 
@@ -125,10 +105,36 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
 
             PropertyCopier<LotYarnViewModel, LotYarn>.Copy(viewModel, model);
 
-            model.YarnId = viewModel.Yarn.Id;
-            model.UnitId = viewModel.Unit.Id;
+            model.YarnId = viewModel.Yarn.Id != null ? (int)viewModel.Yarn.Id : 0;
+            model.YarnCode = viewModel.Yarn.Code;
+            model.YarnName = viewModel.Yarn.Name;
+            model.MachineId = viewModel.Machine._id;
+            model.MachineCode = viewModel.Machine.code;
+            model.MachineName = viewModel.Machine.name;
+            model.UnitId = viewModel.Unit._id;
+            model.UnitCode = viewModel.Unit.code;
+            model.UnitName = viewModel.Unit.name;
 
             return model;
+        }
+
+        public class Keys
+        {
+
+        }
+
+        public async Task<LotYarn> ReadModelByQuery(string Spinning, string Machine, string Yarn)
+        {
+            LotYarn result = new LotYarn();
+            result = await this.DbSet.Where(lotYarn => String.Equals(lotYarn.UnitName, Spinning) && String.Equals(Machine, lotYarn.MachineName) && String.Equals(Yarn, lotYarn.YarnName)).OrderByDescending(x => x._LastModifiedUtc).FirstOrDefaultAsync();
+
+            //.FirstOrDefaultAsync(lotYarn => String.Equals(lotYarn.UnitName, Spinning) && String.Equals(Machine, lotYarn.MachineName) && String.Equals(Yarn, lotYarn.YarnName)); &&  && String.Equals(x.MachineName, Machine)
+            if (result == null)
+            {
+                result = new LotYarn();
+                return result;
+            }
+            return result;
         }
 
     }
