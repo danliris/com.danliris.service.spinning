@@ -129,7 +129,7 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
         public async Task<LotYarn> ReadModelByQuery(string Spinning, string Machine, string Yarn)
         {
             LotYarn result = new LotYarn();
-            result = await this.DbSet.Where(lotYarn => String.Equals(lotYarn.UnitName, Spinning) && String.Equals(Machine, lotYarn.MachineName) && String.Equals(Yarn, lotYarn.YarnName)).OrderByDescending(x => x._LastModifiedUtc).FirstOrDefaultAsync();
+            result = await this.DbSet.Where(lotYarn => String.Equals(lotYarn.UnitName, Spinning) && String.Equals(Machine, lotYarn.MachineName) && String.Equals(Yarn, lotYarn.YarnName) && !lotYarn._IsDeleted).OrderByDescending(x => x._LastModifiedUtc).FirstOrDefaultAsync();
 
             //.FirstOrDefaultAsync(lotYarn => String.Equals(lotYarn.UnitName, Spinning) && String.Equals(Machine, lotYarn.MachineName) && String.Equals(Yarn, lotYarn.YarnName)); &&  && String.Equals(x.MachineName, Machine)
             if (result == null)
