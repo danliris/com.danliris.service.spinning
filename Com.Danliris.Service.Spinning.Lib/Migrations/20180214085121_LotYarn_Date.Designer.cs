@@ -11,9 +11,10 @@ using System;
 namespace Com.Danliris.Service.Spinning.Lib.Migrations
 {
     [DbContext(typeof(SpinningDbContext))]
-    partial class SpinningDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180214085121_LotYarn_Date")]
+    partial class LotYarn_Date
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,8 +44,6 @@ namespace Com.Danliris.Service.Spinning.Lib.Migrations
 
                     b.Property<string>("MachineName")
                         .HasMaxLength(100);
-
-                    b.Property<string>("Remark");
 
                     b.Property<string>("UnitCode")
                         .HasMaxLength(100);

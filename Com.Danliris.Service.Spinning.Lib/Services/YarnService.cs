@@ -17,7 +17,7 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
         {
         }
 
-        public override Tuple<List<Yarn>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
+        public override Tuple<List<Yarn>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{_LastModifiedUtc}", List<string> Select = null, string Keyword = null, string Filter = "{}")
         {
             IQueryable<Yarn> Query = this.DbContext.Yarns;
 
