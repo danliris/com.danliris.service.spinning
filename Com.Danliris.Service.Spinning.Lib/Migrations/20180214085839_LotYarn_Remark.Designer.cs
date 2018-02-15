@@ -11,9 +11,10 @@ using System;
 namespace Com.Danliris.Service.Spinning.Lib.Migrations
 {
     [DbContext(typeof(SpinningDbContext))]
-    partial class SpinningDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180214085839_LotYarn_Remark")]
+    partial class LotYarn_Remark
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -107,24 +108,14 @@ namespace Com.Danliris.Service.Spinning.Lib.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<double>("Counter");
-
-                    b.Property<DateTime>("Date");
-
-                    b.Property<double>("Hank");
-
                     b.Property<string>("Lot");
-
-                    b.Property<string>("MachineId");
-
-                    b.Property<string>("MachineName");
 
                     b.Property<string>("NomorInputProduksi")
                         .HasMaxLength(100);
 
                     b.Property<string>("Shift");
 
-                    b.Property<string>("UnitId");
+                    b.Property<int>("UnitId");
 
                     b.Property<string>("UnitName");
 
@@ -164,9 +155,68 @@ namespace Com.Danliris.Service.Spinning.Lib.Migrations
 
                     b.Property<DateTime>("_LastModifiedUtc");
 
+                    b.Property<DateTime>("tanggal");
+
                     b.HasKey("Id");
 
                     b.ToTable("SpinningInputProductions");
+                });
+
+            modelBuilder.Entity("Com.Danliris.Service.Spinning.Lib.Models.SpinningInputProduction_InputDetails", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(100);
+
+                    b.Property<bool>("Active");
+
+                    b.Property<string>("Code");
+
+                    b.Property<int>("Counter");
+
+                    b.Property<int>("Hash");
+
+                    b.Property<int>("SpinningInputProductionId");
+
+                    b.Property<string>("_CreatedAgent")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<string>("_CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("_CreatedUtc");
+
+                    b.Property<string>("_DeletedAgent")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<string>("_DeletedBy")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("_DeletedUtc");
+
+                    b.Property<bool>("_IsDeleted");
+
+                    b.Property<string>("_LastModifiedAgent")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<string>("_LastModifiedBy")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("_LastModifiedUtc");
+
+                    b.Property<int>("test");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SpinningInputProductionId");
+
+                    b.ToTable("SpinningInputProduction_InputDetails");
                 });
 
             modelBuilder.Entity("Com.Danliris.Service.Spinning.Lib.Models.Yarn", b =>
@@ -316,6 +366,14 @@ namespace Com.Danliris.Service.Spinning.Lib.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("YarnOutputProductions");
+                });
+
+            modelBuilder.Entity("Com.Danliris.Service.Spinning.Lib.Models.SpinningInputProduction_InputDetails", b =>
+                {
+                    b.HasOne("Com.Danliris.Service.Spinning.Lib.Models.SpinningInputProduction")
+                        .WithMany("Input")
+                        .HasForeignKey("SpinningInputProductionId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

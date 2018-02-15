@@ -34,7 +34,7 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
             /* Const Select */
             List<string> SelectedFields = new List<string>()
             {
-                "Id", "Code", "Lot", "Unit", "Yarn", "Machine"
+                "Id", "Code", "Lot", "Unit", "Yarn", "Machine", "Date"
             };
 
             Query = Query
@@ -42,6 +42,7 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
                 {
                     Id = o.Id,
                     Code = o.Code,
+                    Date = o.Date,
                     Lot = o.Lot,
                     UnitId = o.UnitId,
                     UnitCode = o.UnitCode,
@@ -96,6 +97,7 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
             viewModel.Unit._id = model.UnitId;
             viewModel.Unit.code = model.UnitCode;
             viewModel.Unit.name = model.UnitName;
+            viewModel.Date = model.Date;
             return viewModel;
         }
 
@@ -114,6 +116,7 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
             model.UnitId = viewModel.Unit._id;
             model.UnitCode = viewModel.Unit.code;
             model.UnitName = viewModel.Unit.name;
+            model.Date = (DateTime)viewModel.Date;
 
             return model;
         }
@@ -126,7 +129,7 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
         public async Task<LotYarn> ReadModelByQuery(string Spinning, string Machine, string Yarn)
         {
             LotYarn result = new LotYarn();
-            result = await this.DbSet.Where(lotYarn => String.Equals(lotYarn.UnitName, Spinning) && String.Equals(Machine, lotYarn.MachineName) && String.Equals(Yarn, lotYarn.YarnName)).OrderByDescending(x => x._LastModifiedUtc).FirstOrDefaultAsync();
+            result = await this.DbSet.Where(lotYarn => String.Equals(lotYarn.UnitName, Spinning) && String.Equals(Machine, lotYarn.MachineName) && String.Equals(Yarn, lotYarn.YarnName) && !lotYarn._IsDeleted).OrderByDescending(x => x._LastModifiedUtc).FirstOrDefaultAsync();
 
             //.FirstOrDefaultAsync(lotYarn => String.Equals(lotYarn.UnitName, Spinning) && String.Equals(Machine, lotYarn.MachineName) && String.Equals(Yarn, lotYarn.YarnName)); &&  && String.Equals(x.MachineName, Machine)
             if (result == null)
