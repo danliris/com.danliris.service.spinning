@@ -33,7 +33,7 @@ namespace Com.Danliris.Service.Spinning.WebApi.Controllers.v1.BasicControllers
                     SpinningInputProduction model = new SpinningInputProduction();
                     model.Date = (DateTime)ViewModel.Date;
                     model.Shift = ViewModel.Shift;
-                    model.YarnId = ViewModel.YarnId != null ? (int)ViewModel.YarnId : 0;
+                    model.YarnId = ViewModel.YarnId;
                     model.YarnName = ViewModel.YarnName;
                     model.UnitId = ViewModel.UnitId;
                     model.UnitName = ViewModel.UnitName;

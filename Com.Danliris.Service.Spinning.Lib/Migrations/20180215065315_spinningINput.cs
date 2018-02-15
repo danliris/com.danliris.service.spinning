@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Com.Danliris.Service.Spinning.Lib.Migrations
 {
-    public partial class initial3 : Migration
+    public partial class spinningINput : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -17,10 +17,12 @@ namespace Com.Danliris.Service.Spinning.Lib.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Active = table.Column<bool>(nullable: false),
                     Code = table.Column<string>(maxLength: 100, nullable: true),
+                    Date = table.Column<DateTime>(nullable: false),
                     Lot = table.Column<string>(maxLength: 500, nullable: true),
                     MachineCode = table.Column<string>(maxLength: 100, nullable: true),
                     MachineId = table.Column<string>(maxLength: 100, nullable: true),
                     MachineName = table.Column<string>(maxLength: 100, nullable: true),
+                    Remark = table.Column<string>(nullable: true),
                     UnitCode = table.Column<string>(maxLength: 100, nullable: true),
                     UnitId = table.Column<string>(maxLength: 100, nullable: true),
                     UnitName = table.Column<string>(maxLength: 100, nullable: true),
