@@ -52,13 +52,37 @@ namespace Com.Danliris.Service.Spinning.Lib.ViewModels
                 yield return new ValidationResult("Tanggal harus diisi", new List<string> { "Date" });
             if (this.Machine == null || string.IsNullOrWhiteSpace(this.Machine._id))
                 yield return new ValidationResult("Mesin harus diisi", new List<string> { "MachineId" });
-            if (this.Counter == 0)
-                yield return new ValidationResult("Counter harus diisi", new List<string> { "Counter" });
+
+            int Count = 0;
+            string inputError = "[";
+
+            if (this.input == null || this.input.Count.Equals(0))
+            {
+                yield return new ValidationResult("Detail input harus diisi", new List<string> { "input" });
+            }
+            else
+            {
+                foreach (Input i in this.input)
+                {
+                    inputError += "{";
+                    if (i.Counter == 0)
+                    {
+                        Count++;
+                        inputError += "Counter: 'Counter harus diisi', ";
+                    }
+
+                    inputError += "},";
+                }
+            }
             if (this.Unit == null || string.IsNullOrWhiteSpace(this.Unit._id))
                 yield return new ValidationResult("Unit harus diisi", new List<string> { "UnitId" });
             if (this.Yarn == null ||(this.Yarn.Id == 0))
-                yield return new ValidationResult("Unit harus diisi", new List<string> { "UnitId" });
+                yield return new ValidationResult("Yarn harus diisi", new List<string> { "YarnId" });
 
+            if (Count > 0)
+            {
+                yield return new ValidationResult(inputError, new List<string> { "input" });
+            }
         }
     }
 }
