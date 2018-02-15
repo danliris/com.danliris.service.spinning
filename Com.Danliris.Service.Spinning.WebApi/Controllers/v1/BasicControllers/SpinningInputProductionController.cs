@@ -33,12 +33,12 @@ namespace Com.Danliris.Service.Spinning.WebApi.Controllers.v1.BasicControllers
                     SpinningInputProduction model = new SpinningInputProduction();
                     model.Date = (DateTime)ViewModel.Date;
                     model.Shift = ViewModel.Shift;
-                    model.YarnId = ViewModel.YarnId;
-                    model.YarnName = ViewModel.YarnName;
-                    model.UnitId = ViewModel.UnitId;
-                    model.UnitName = ViewModel.UnitName;
-                    model.MachineId = ViewModel.MachineId;
-                    model.MachineName = ViewModel.MachineName;
+                    model.YarnId = ViewModel.Yarn.Id;
+                    model.YarnName = ViewModel.Yarn.Name;
+                    model.UnitId = ViewModel.Unit._id;
+                    model.UnitName = ViewModel.Unit.name;
+                    model.MachineId = ViewModel.Machine._id;
+                    model.MachineName = ViewModel.Machine.name;
                     model.Lot = ViewModel.Lot;
 
                     model.Counter = (double)data.Counter;

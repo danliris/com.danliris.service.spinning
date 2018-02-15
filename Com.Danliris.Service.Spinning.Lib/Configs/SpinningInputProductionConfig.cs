@@ -14,6 +14,15 @@ namespace Com.Danliris.Service.Spinning.Lib.Configs
         {
             builder.Property(c => c.NomorInputProduksi).HasMaxLength(100);
 
+            builder.Property(c => c.NomorInputProduksi).HasMaxLength(100);
+            builder.Property(c => c.UnitId).HasMaxLength(500);
+            builder.Property(c => c.UnitName).HasMaxLength(500);
+            builder.Property(c => c.MachineId).HasMaxLength(500);
+            builder.Property(c => c.MachineName).HasMaxLength(500);
+            builder.Property(c => c.Shift).HasMaxLength(500);
+            builder.Property(c => c.YarnId).HasMaxLength(100);
+            builder.Property(c => c.YarnName).HasMaxLength(500);
+
         }
     }
 }

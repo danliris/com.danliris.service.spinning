@@ -26,12 +26,15 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
             viewModel.NomorInputProduksi = model.NomorInputProduksi;
             viewModel.Date = model.Date;
             viewModel.Shift = model.Shift;
-            viewModel.YarnId = model.YarnId;
-            viewModel.YarnName = model.YarnName;
-            viewModel.MachineId = model.MachineId;
-            viewModel.MachineName = model.MachineName;
-            viewModel.UnitId = model.UnitId;
-            viewModel.UnitName = model.UnitName;
+            viewModel.Yarn = new SpinningInputProductionViewModel.yarn();
+            viewModel.Yarn.Id = model.YarnId;
+            viewModel.Yarn.Name = model.YarnName;
+            viewModel.Machine = new SpinningInputProductionViewModel.machine();
+            viewModel.Machine._id = model.MachineId;
+            viewModel.Machine.name = model.MachineName;
+            viewModel.Unit = new SpinningInputProductionViewModel.unit();
+            viewModel.Unit._id = model.UnitId;
+            viewModel.Unit.name = model.UnitName;
             viewModel.Lot = model.Lot;
             viewModel.Counter = model.Counter;
             viewModel.Hank = model.Hank;
@@ -45,12 +48,12 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
             PropertyCopier<SpinningInputProductionViewModel, SpinningInputProduction>.Copy(viewModel, model);
             model.Date = (DateTime)viewModel.Date;
             model.Shift = viewModel.Shift;
-            model.YarnId = viewModel.YarnId;
-            model.YarnName = viewModel.YarnName;
-            model.MachineId = viewModel.MachineId;
-            model.MachineName = viewModel.MachineName;
-            model.YarnId = viewModel.YarnId;
-            model.YarnName = viewModel.YarnName;
+            model.UnitId = viewModel.Unit._id;
+            model.UnitName = viewModel.Unit.name;
+            model.MachineId = viewModel.Machine._id;
+            model.MachineName = viewModel.Machine.name;
+            model.YarnId = viewModel.Yarn.Id;
+            model.YarnName = viewModel.Yarn.Name;
             model.Lot = viewModel.Lot;
             model.Counter = (double)viewModel.Counter;
             model.Hank = (double)viewModel.Hank;
@@ -76,7 +79,7 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
             /* Const Select */
             List<string> SelectedFields = new List<string>()
             {
-               "Id","NomorInputProduksi","YarnName","UnitName","MachineName","Lot","Shift","Date","Counter","Hank"
+               "Id","NomorInputProduksi","Yarn","Unit","Machine","Lot","Shift","Date","Counter","Hank"
             };
 
             Query = Query
@@ -84,8 +87,11 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
                 {
                     Id = o.Id,
                     NomorInputProduksi = o.NomorInputProduksi,
+                    YarnId=o.YarnId,
                     YarnName=o.YarnName,
+                    UnitId=o.UnitId,
                     UnitName=o.UnitName,
+                    MachineId=o.MachineId,
                     MachineName=o.MachineName,
                     Lot=o.Lot,
                     Shift=o.Shift,
