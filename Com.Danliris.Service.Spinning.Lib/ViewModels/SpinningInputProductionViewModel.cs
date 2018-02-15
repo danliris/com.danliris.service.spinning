@@ -52,8 +52,12 @@ namespace Com.Danliris.Service.Spinning.Lib.ViewModels
                 yield return new ValidationResult("Tanggal harus diisi", new List<string> { "Date" });
             if (this.Machine == null || string.IsNullOrWhiteSpace(this.Machine._id))
                 yield return new ValidationResult("Mesin harus diisi", new List<string> { "MachineId" });
-            //if (this.Unit == null || string.IsNullOrWhiteSpace(this.Unit._id))
-            //    yield return new ValidationResult("Unit harus diisi", new List<string> { "UnitId" });
+            if (this.Counter == 0)
+                yield return new ValidationResult("Counter harus diisi", new List<string> { "Counter" });
+            if (this.Unit == null || string.IsNullOrWhiteSpace(this.Unit._id))
+                yield return new ValidationResult("Unit harus diisi", new List<string> { "UnitId" });
+            if (this.Yarn == null ||(this.Yarn.Id == 0))
+                yield return new ValidationResult("Unit harus diisi", new List<string> { "UnitId" });
 
         }
     }
