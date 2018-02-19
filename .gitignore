@@ -265,3 +265,7 @@ Com.Danliris.Service.Spinning.WebApi/Properties/launchSettings.json
 
 #vscode
 .vscode/
+
+#appsettings
+Com.Danliris.Service.Spinning.WebApi/appsettings.Development.json
+Com.Danliris.Service.Spinning.WebApi/appsettings.json
