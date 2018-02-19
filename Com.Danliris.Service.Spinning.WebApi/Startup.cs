@@ -40,7 +40,6 @@ namespace Com.Danliris.Service.Spinning.WebApi
                 .AddTransient<YarnService>()
                 .AddTransient<LotYarnService>()
                 .AddTransient<SpinningInputProductionService>()
-                .AddTransient<SpinningInputProduction_InputDetailsService>()
                 .AddTransient<YarnOutputProductionService>();
 
 

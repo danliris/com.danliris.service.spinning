@@ -9,9 +9,7 @@ using System.Reflection;
 using Com.Moonlay.NetCore.Lib;
 using Com.Danliris.Service.Spinning.Lib.ViewModels;
 using Com.Danliris.Service.Spinning.Lib.Interfaces;
-using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 
 namespace Com.Danliris.Service.Spinning.Lib.Services
 {
@@ -21,38 +19,46 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
         {
         }
 
-        public SpinningInputProduction MapToModel(SpinningInputProductionViewModel viewModel)
-        {
-
-            SpinningInputProduction model = new SpinningInputProduction();
-            model.Input = new List<SpinningInputProduction_InputDetails>();
-            PropertyCopier<SpinningInputProductionViewModel, SpinningInputProduction>.Copy(viewModel, model);
-
-            foreach (SpinningInputProductionViewModel.InputModel inputVM in viewModel.Input)
-            {
-
-                SpinningInputProduction_InputDetails input = new SpinningInputProduction_InputDetails();
-                PropertyCopier<SpinningInputProductionViewModel.InputModel, SpinningInputProduction_InputDetails>.Copy(inputVM, input);
-                model.Input.Add(input);
-            }
-            return model;
-
-        }
-
         public SpinningInputProductionViewModel MapToViewModel(SpinningInputProduction model)
         {
             SpinningInputProductionViewModel viewModel = new SpinningInputProductionViewModel();
-            viewModel.Input = new List<SpinningInputProductionViewModel.InputModel>();
             PropertyCopier<SpinningInputProduction, SpinningInputProductionViewModel>.Copy(model, viewModel);
-
-            foreach (SpinningInputProductionViewModel.InputModel inputeVM in viewModel.Input)
-            {
-                SpinningInputProduction_InputDetails input = new SpinningInputProduction_InputDetails();
-                PropertyCopier<SpinningInputProductionViewModel.InputModel, SpinningInputProduction_InputDetails>.Copy(inputeVM, input);
-                model.Input.Add(input);
-            }
+            viewModel.NomorInputProduksi = model.NomorInputProduksi;
+            viewModel.Date = model.Date;
+            viewModel.Shift = model.Shift;
+            viewModel.Yarn = new SpinningInputProductionViewModel.yarn();
+            viewModel.Yarn.Id = model.YarnId;
+            viewModel.Yarn.Name = model.YarnName;
+            viewModel.Machine = new SpinningInputProductionViewModel.machine();
+            viewModel.Machine._id = model.MachineId;
+            viewModel.Machine.name = model.MachineName;
+            viewModel.Unit = new SpinningInputProductionViewModel.unit();
+            viewModel.Unit._id = model.UnitId;
+            viewModel.Unit.name = model.UnitName;
+            viewModel.Lot = model.Lot;
+            viewModel.Counter = model.Counter;
+            viewModel.Hank = model.Hank;
 
             return viewModel;
+        }
+
+        public SpinningInputProduction MapToModel(SpinningInputProductionViewModel viewModel)
+        {
+            SpinningInputProduction model = new SpinningInputProduction();
+            PropertyCopier<SpinningInputProductionViewModel, SpinningInputProduction>.Copy(viewModel, model);
+            model.Date = (DateTime)viewModel.Date;
+            model.Shift = viewModel.Shift;
+            model.UnitId = viewModel.Unit._id;
+            model.UnitName = viewModel.Unit.name;
+            model.MachineId = viewModel.Machine._id;
+            model.MachineName = viewModel.Machine.name;
+            model.YarnId = viewModel.Yarn.Id;
+            model.YarnName = viewModel.Yarn.Name;
+            model.Lot = viewModel.Lot;
+            model.Counter = (double)viewModel.Counter;
+            model.Hank = (double)viewModel.Hank;
+
+            return model;
         }
 
         public override Tuple<List<SpinningInputProduction>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
@@ -64,7 +70,7 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
             {
                 List<string> SearchAttributes = new List<string>()
                 {
-                    "NomorInputProduksi"
+                    "NomorInputProduksi","YarnName","UnitName","MachineName","Lot"
                 };
 
                 Query = ConfigureSearch(Query, SearchAttributes, Keyword);
@@ -73,7 +79,7 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
             /* Const Select */
             List<string> SelectedFields = new List<string>()
             {
-                "_id","NomorInputProduksi"
+               "Id","NomorInputProduksi","Yarn","Unit","Machine","Lot","Shift","Date","Counter","Hank"
             };
 
             Query = Query
@@ -81,7 +87,17 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
                 {
                     Id = o.Id,
                     NomorInputProduksi = o.NomorInputProduksi,
-
+                    YarnId=o.YarnId,
+                    YarnName=o.YarnName,
+                    UnitId=o.UnitId,
+                    UnitName=o.UnitName,
+                    MachineId=o.MachineId,
+                    MachineName=o.MachineName,
+                    Lot=o.Lot,
+                    Shift=o.Shift,
+                    Date=o.Date,
+                    Counter=o.Counter,
+                    Hank=o.Hank,
                 });
 
             /* Order */
@@ -112,6 +128,8 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
 
             return Tuple.Create(Data, TotalData, OrderDictionary, SelectedFields);
         }
+
+
         public override void OnCreating(SpinningInputProduction model)
         {
             do
@@ -120,74 +138,34 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
             }
             while (this.DbSet.Any(d => d.NomorInputProduksi.Equals(model.NomorInputProduksi)));
 
-            if (model.Input.Count > 0)
-            {
-                SpinningInputProduction_InputDetailsService spinningInputProduction_InputDetailsService = this.ServiceProvider.GetService<SpinningInputProduction_InputDetailsService>();
-                foreach (SpinningInputProduction_InputDetails input in model.Input)
-                {
-                    spinningInputProduction_InputDetailsService.OnCreating(input);
-                }
-            }
-
-
             base.OnCreating(model);
         }
 
-        public override async Task<int> UpdateModel(int Id, SpinningInputProduction Model)
+        public async Task<int> CreateModels(List<SpinningInputProduction> models)
         {
-            SpinningInputProduction_InputDetailsService spinningInputProduction_InputDetailsService = this.ServiceProvider.GetService<SpinningInputProduction_InputDetailsService>();
-
-            int updated = 0;
+            int created = 0;
             using (var transaction = this.DbContext.Database.BeginTransaction())
             {
                 try
                 {
-                    HashSet<int> input = new HashSet<int>(spinningInputProduction_InputDetailsService.DbSet
-                        .Where(p => p.SpinningInputProductionId.Equals(Id))
-                        .Select(p => p.Id));
-                    updated = await this.UpdateAsync(Id, Model);
-
-                    foreach (int data in input)
+                    foreach (SpinningInputProduction model in models)
                     {
-                        SpinningInputProduction_InputDetails spinningInput = Model.Input.FirstOrDefault(prop => prop.Id.Equals(data));
-
-                        if (spinningInput == null)
-                        {
-                            await spinningInputProduction_InputDetailsService.DeleteModel(data);
-                        }
-
-                    }
-
-                    foreach (SpinningInputProduction_InputDetails spinningInput in Model.Input)
-                    {
-                        if (spinningInput.Id != null && spinningInput.Id != 0)
-                        {
-                            await spinningInputProduction_InputDetailsService.UpdateModel(spinningInput.Id,spinningInput);
-                        }
-                        else if (spinningInput.Id.Equals(0))
-                        {
-                            await spinningInputProduction_InputDetailsService.CreateModel(spinningInput);
-                        }
+                        created = await this.CreateAsync(model);
                     }
 
                     transaction.Commit();
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     transaction.Rollback();
                 }
             }
-
-            return updated;
+            return created;
         }
 
-        public override async Task<SpinningInputProduction> ReadModelById(int id)
-        {
-            return await this.DbSet
-                .Where(d => d.Id.Equals(id))
-                .Include(o => o.Input)
-                .FirstOrDefaultAsync();
-        }
+
 
     }
+
 }
+

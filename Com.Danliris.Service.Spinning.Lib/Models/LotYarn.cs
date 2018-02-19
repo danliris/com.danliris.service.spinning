@@ -24,8 +24,6 @@ namespace Com.Danliris.Service.Spinning.Lib.Models
         public string MachineName { get; set; }
         public string Remark { get; set; }
 
-
-
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             LotYarnService service = validationContext.GetService<LotYarnService>();
