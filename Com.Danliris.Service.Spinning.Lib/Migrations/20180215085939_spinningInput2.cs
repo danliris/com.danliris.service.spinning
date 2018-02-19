@@ -4,21 +4,16 @@ using System.Collections.Generic;
 
 namespace Com.Danliris.Service.Spinning.Lib.Migrations
 {
-    public partial class LotYarn_Remark : Migration
+    public partial class spinningInput2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "Remark",
-                table: "LotYarns",
-                nullable: true);
+
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "Remark",
-                table: "LotYarns");
+
         }
     }
 }
