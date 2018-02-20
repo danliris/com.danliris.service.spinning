@@ -10,6 +10,9 @@ using Com.Moonlay.NetCore.Lib;
 using Com.Danliris.Service.Spinning.Lib.ViewModels;
 using Com.Danliris.Service.Spinning.Lib.Interfaces;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using System.IO;
+using System.Data;
 
 namespace Com.Danliris.Service.Spinning.Lib.Services
 {
@@ -87,17 +90,17 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
                 {
                     Id = o.Id,
                     NomorInputProduksi = o.NomorInputProduksi,
-                    YarnId=o.YarnId,
-                    YarnName=o.YarnName,
-                    UnitId=o.UnitId,
-                    UnitName=o.UnitName,
-                    MachineId=o.MachineId,
-                    MachineName=o.MachineName,
-                    Lot=o.Lot,
-                    Shift=o.Shift,
-                    Date=o.Date,
-                    Counter=o.Counter,
-                    Hank=o.Hank,
+                    YarnId = o.YarnId,
+                    YarnName = o.YarnName,
+                    UnitId = o.UnitId,
+                    UnitName = o.UnitName,
+                    MachineId = o.MachineId,
+                    MachineName = o.MachineName,
+                    Lot = o.Lot,
+                    Shift = o.Shift,
+                    Date = o.Date,
+                    Counter = o.Counter,
+                    Hank = o.Hank,
                 });
 
             /* Order */
@@ -119,6 +122,9 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
                     Query.OrderBy(b => b.GetType().GetProperty(TransformKey, IgnoreCase).GetValue(b)) :
                     Query.OrderByDescending(b => b.GetType().GetProperty(TransformKey, IgnoreCase).GetValue(b));
             }
+
+            //Dictionary<string, string> FilterDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Filter);
+            //Query = ConfigureFilter(Query, FilterDictionary);
 
             /* Pagination */
             Pageable<SpinningInputProduction> pageable = new Pageable<SpinningInputProduction>(Query, Page - 1, Size);
@@ -161,6 +167,36 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
                 }
             }
             return created;
+        }
+
+        public async Task<List<SpinningInputProduction>> getDataXls(string unit, string DateFrom, string DateTo)
+        {
+
+            List<SpinningInputProduction> result = new List<SpinningInputProduction>();
+            DateTime dateFrom = Convert.ToDateTime(DateFrom);
+            DateTime dateTo = Convert.ToDateTime(DateTo);
+            result = await this.DbSet.Where(data => String.Equals(data.UnitName, unit) && (data.Date >= dateFrom && data.Date <= dateTo) && !data._IsDeleted).OrderByDescending(x => x._LastModifiedUtc).ToListAsync();
+
+            return result;
+        }
+
+        public MemoryStream GenerateExcel(List<SpinningInputProduction> data)
+        {
+            DataTable result = new DataTable();
+            result.Columns.Add(new DataColumn() { ColumnName = "NomorInputProduksi", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Yarn Name", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Date", DataType = typeof(DateTime) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Unit Name", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Machine Name", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Lot", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Shift", DataType = typeof(String) });
+            if (data.Count == 0)
+                result.Rows.Add("","","","","","",""); // to allow column name to be generated properly for empty data as template
+            else
+                foreach (var item in data)
+            result.Rows.Add(item.NomorInputProduksi, item.YarnName,item.Date,item.UnitName,item.MachineName,item.Lot,item.Shift);
+
+            return Excel.CreateExcel(new List<KeyValuePair<DataTable, string>>() { new KeyValuePair<DataTable, string>(result, "Territory") }, true);
         }
 
 

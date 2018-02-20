@@ -5,10 +5,12 @@ using Com.Danliris.Service.Spinning.Lib.ViewModels;
 using Com.Danliris.Service.Spinning.WebApi.Helpers;
 using Com.Moonlay.NetCore.Lib.Service;
 using Microsoft.AspNetCore.Mvc;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+
 
 namespace Com.Danliris.Service.Spinning.WebApi.Controllers.v1.BasicControllers
 {
@@ -60,6 +62,53 @@ namespace Com.Danliris.Service.Spinning.WebApi.Controllers.v1.BasicControllers
                     new ResultFormatter(ApiVersion, General.BAD_REQUEST_STATUS_CODE, General.BAD_REQUEST_MESSAGE)
                     .Fail(e);
                 return BadRequest(Result);
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, General.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
+
+        [HttpGet("download/{unit}/{dateFrom}/{dateTo}")]
+        public async Task<IActionResult> downloadXls([FromRoute] string unit, [FromRoute] string dateFrom, [FromRoute] string dateTo)
+        {
+
+            try
+            {
+                var data = await Service.getDataXls(unit, dateFrom, dateTo);
+                byte[] xlsInBytes;
+                var xls = Service.GenerateExcel(data);
+
+                string filename = String.Format("Spinning Input Production Report - {0}.xlsx", DateTime.UtcNow.ToString("ddMMyyyy"));
+
+                xlsInBytes = xls.ToArray();
+                var file = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
+                return file;
+
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, General.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
+        [HttpGet("report/{unit}/{dateFrom}/{dateTo}")]
+        public async Task<IActionResult> GetReportList([FromRoute] string unit, [FromRoute] string dateFrom, [FromRoute] string dateTo)
+        {
+            try
+            {
+                var data = await Service.getDataXls(unit, dateFrom, dateTo);
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, General.OK_STATUS_CODE, General.OK_MESSAGE)
+                    .Ok(data);
+                return Ok(Result);
             }
             catch (Exception e)
             {
