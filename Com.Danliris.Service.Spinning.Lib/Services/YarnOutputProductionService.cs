@@ -260,7 +260,7 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
                     result.Rows.Add($"{item.Date:dd/MM/yyyy}", item.Unit, item.Yarn, Math.Round(item.FirstShiftGood, 2), Math.Round(item.FirstShiftBad, 2), Math.Round(item.SecondShiftGood, 2), Math.Round(item.SecondShiftBad, 2), Math.Round(item.ThirdShiftGood, 2), Math.Round(item.ThirdShiftBad, 2), Math.Round(item.SubtotalGood, 2), Math.Round(item.SubtotalBad, 2), Math.Round(item.Total, 2));
                 }
 
-            return Excel.CreateExcel(new List<KeyValuePair<DataTable, string>>() { new KeyValuePair<DataTable, string>(result, "Territory") }, true);
+            return Excel.CreateExcel(new List<KeyValuePair<DataTable, string>>() { new KeyValuePair<DataTable, string>(result, "Laporan Output") }, true);
         }
     }
 }
