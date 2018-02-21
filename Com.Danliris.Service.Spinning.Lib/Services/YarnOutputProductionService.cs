@@ -9,6 +9,9 @@ using Com.Moonlay.NetCore.Lib;
 using Com.Danliris.Service.Spinning.Lib.ViewModels;
 using Com.Danliris.Service.Spinning.Lib.Interfaces;
 using System.Threading.Tasks;
+using System.Data;
+using System.IO;
+using Microsoft.EntityFrameworkCore;
 
 namespace Com.Danliris.Service.Spinning.Lib.Services
 {
@@ -155,6 +158,109 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
             model.DrumTotal = (double)viewModel.DrumTotal;
             model.YarnWeightPerCone = (double)viewModel.YarnWeightPerCone;
             return model;
+        }
+
+        public class TempData
+        {
+            public string Unit { get; set; }
+            public DateTime Date { get; set; }
+            public string Yarn { get; set; }
+            public string Shift { get; set; }
+            public double Good { get; set; }
+            public double Bad { get; set; }
+            public double Weight { get; set; }
+        }
+
+        public class ReportData
+        {
+            public string Unit { get; set; }
+            public DateTime Date { get; set; }
+            public string Yarn { get; set; }
+            public double FirstShiftGood { get; set; }
+            public double FirstShiftBad { get; set; }
+            public double SecondShiftGood { get; set; }
+            public double SecondShiftBad { get; set; }
+            public double ThirdShiftGood { get; set; }
+            public double ThirdShiftBad { get; set; }
+            public double SubtotalGood { get; set; }
+            public double SubtotalBad { get; set; }
+            public double Total { get; set; }
+        }
+
+        public async Task<List<ReportData>> getData(string SpinningName, string YarnName, DateTime DateFrom, DateTime DateTo)
+        {
+            List<YarnOutputProduction> models = new List<YarnOutputProduction>();
+            models = await this.DbSet.Where(data => (data.Date >= DateFrom && data.Date <= DateTo) && !data._IsDeleted).OrderByDescending(x => x._LastModifiedUtc).ToListAsync();
+            
+            if (!String.Equals(SpinningName.ToUpper(), "ALL"))
+            {
+                models = models.Where(x => String.Equals(SpinningName.ToUpper(), x.SpinningName.ToUpper())).ToList();
+            }
+
+            if (!String.Equals(YarnName.ToUpper(), "ALL"))
+            {
+                models = models.Where(x => String.Equals(YarnName.ToUpper(), x.YarnName.ToUpper())).ToList();
+            }
+
+            List<TempData> tempData = models
+                   .GroupBy(g => new { g.SpinningName, g.Shift, g.Date, g.YarnName })
+                   .Select(x => new TempData
+                   {
+                       Unit = x.First().SpinningName,
+                       Date = x.First().Date,
+                       Yarn = x.First().YarnName,
+                       Shift = x.First().Shift,
+                       Good = x.Sum(s => s.GoodOutput),
+                       Bad = x.Sum(s => s.BadOutput),
+                       Weight = x.Sum(s => s.YarnWeightPerCone)
+                   }).ToList();
+
+            List<ReportData> results = tempData
+                .GroupBy(g => new { g.Unit, g.Date, g.Yarn })
+                .Select(x => new ReportData
+                {
+                    Unit = x.First().Unit,
+                    Date = x.First().Date,
+                    Yarn = x.First().Yarn,
+                    FirstShiftGood = x.Where(c => String.Equals(c.Shift, "Shift I: 06.00 - 14.00")).Sum(s => s.Good) / (181.44 / x.Where(c => String.Equals(c.Shift, "Shift I: 06.00 - 14.00")).Sum(s => s.Weight)),
+                    FirstShiftBad = x.Where(c => String.Equals(c.Shift, "Shift I: 06.00 - 14.00")).Sum(s => s.Bad) / (181.44 / x.Where(c => String.Equals(c.Shift, "Shift I: 06.00 - 14.00")).Sum(s => s.Weight)),
+                    SecondShiftGood = x.Where(c => String.Equals(c.Shift, "Shift II: 14.00 - 22.00")).Sum(s => s.Good) / (181.44 / x.Where(c => String.Equals(c.Shift, "Shift II: 14.00 - 22.00")).Sum(s => s.Weight)),
+                    SecondShiftBad = x.Where(c => String.Equals(c.Shift, "Shift II: 14.00 - 22.00")).Sum(s => s.Bad) / (181.44 / x.Where(c => String.Equals(c.Shift, "Shift II: 14.00 - 22.00")).Sum(s => s.Weight)),
+                    ThirdShiftGood = x.Where(c => String.Equals(c.Shift, "Shift III: 22.00 - 06.00")).Sum(s => s.Good) / (181.44 / x.Where(c => String.Equals(c.Shift, "Shift III: 22.00 - 06.00")).Sum(s => s.Weight)),
+                    ThirdShiftBad = x.Where(c => String.Equals(c.Shift, "Shift III: 22.00 - 06.00")).Sum(s => s.Bad) / (181.44 / x.Where(c => String.Equals(c.Shift, "Shift III: 22.00 - 06.00")).Sum(s => s.Weight)),
+                    SubtotalGood = x.Sum(s => s.Good) / (181.44 / x.Sum(s => s.Weight)),
+                    SubtotalBad = x.Sum(s => s.Bad) / (181.44 / x.Sum(s => s.Weight)),
+                    Total = (x.Sum(s => s.Good) + x.Sum(s => s.Bad)) / (181.44 / x.Sum(s => s.Weight))
+                }).ToList();
+
+            return results;
+
+        }
+
+        public MemoryStream GenerateExcel(List<ReportData> data)
+        {
+            DataTable result = new DataTable();
+            result.Columns.Add(new DataColumn() { ColumnName = "Tanggal", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Unit", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Benang", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Shift I (bale) - Good", DataType = typeof(Double) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Shift I (bale) - Bad", DataType = typeof(Double) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Shift II (bale) - Good", DataType = typeof(Double) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Shift II (bale) - Bad", DataType = typeof(Double) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Shift III (bale) - Good", DataType = typeof(Double) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Shift III (bale) - Bad", DataType = typeof(Double) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Subtotal (bale) - Good", DataType = typeof(Double) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Subtotal (bale) - Bad", DataType = typeof(Double) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Total", DataType = typeof(Double) });
+            if (data.Count == 0)
+                result.Rows.Add("", "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0); // to allow column name to be generated properly for empty data as template
+            else
+                foreach (var item in data)
+                {
+                    result.Rows.Add($"{item.Date:dd/MM/yyyy}", item.Unit, item.Yarn, Math.Round(item.FirstShiftGood, 2), Math.Round(item.FirstShiftBad, 2), Math.Round(item.SecondShiftGood, 2), Math.Round(item.SecondShiftBad, 2), Math.Round(item.ThirdShiftGood, 2), Math.Round(item.ThirdShiftBad, 2), Math.Round(item.SubtotalGood, 2), Math.Round(item.SubtotalBad, 2), Math.Round(item.Total, 2));
+                }
+
+            return Excel.CreateExcel(new List<KeyValuePair<DataTable, string>>() { new KeyValuePair<DataTable, string>(result, "Laporan Output") }, true);
         }
     }
 }

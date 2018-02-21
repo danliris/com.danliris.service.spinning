@@ -9,6 +9,8 @@ using Newtonsoft.Json.Serialization;
 using Com.Danliris.Service.Spinning.Lib;
 using Com.Danliris.Service.Spinning.Lib.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace Com.Danliris.Service.Spinning.WebApi
 {
@@ -43,27 +45,34 @@ namespace Com.Danliris.Service.Spinning.WebApi
                 .AddTransient<YarnOutputProductionService>();
 
 
+            //services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+            //    .AddIdentityServerAuthentication(options =>
+            //    {
+            //        options.ApiName = "com.danliris.service.spinning";
+            //        options.ApiSecret = "secret";
+            //        options.Authority = "https://localhost:44350";
+            //        options.RequireHttpsMetadata = false;
+            //        options.NameClaimType = JwtClaimTypes.Name;
+            //        options.RoleClaimType = JwtClaimTypes.Role;
+            //    });
+
+            var Secret = Configuration.GetValue<string>("Secret") ?? Configuration["Secret"];
+            var Key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Secret));
+
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
-                .AddIdentityServerAuthentication(options =>
+                .AddJwtBearer(options =>
                 {
-                    options.ApiName = "com.danliris.service.spinning";
-                    options.ApiSecret = "secret";
-                    options.Authority = "https://localhost:44350";
-                    options.RequireHttpsMetadata = false;
-                    options.NameClaimType = JwtClaimTypes.Name;
-                    options.RoleClaimType = JwtClaimTypes.Role;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateAudience = false,
+                        ValidateIssuer = false,
+                        IssuerSigningKey = Key
+                    };
                 });
 
             services
                 .AddMvcCore()
                 .AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver())
-                .AddAuthorization(options =>
-                {
-                    options.AddPolicy("service.core.read", (policyBuilder) =>
-                    {
-                        policyBuilder.RequireClaim("scope", "service.core.read");
-                    });
-                })
                 .AddJsonFormatters();
 
             services.AddCors(options => options.AddPolicy("SpinningPolicy", builder =>
