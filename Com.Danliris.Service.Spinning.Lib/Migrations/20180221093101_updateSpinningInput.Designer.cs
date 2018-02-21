@@ -11,9 +11,10 @@ using System;
 namespace Com.Danliris.Service.Spinning.Lib.Migrations
 {
     [DbContext(typeof(SpinningDbContext))]
-    partial class SpinningDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180221093101_updateSpinningInput")]
+    partial class updateSpinningInput
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

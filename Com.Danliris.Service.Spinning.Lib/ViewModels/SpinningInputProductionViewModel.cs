@@ -37,11 +37,13 @@ namespace Com.Danliris.Service.Spinning.Lib.ViewModels
             public int Id { get; set; }
             public string Name { get; set; }
             public string Code { get; set; }
+            public double Ne { get; set; }
         }
         public class Input
         {
             public double Counter { get; set; }
             public double Hank { get; set; }
+            public double Bale { get; set; }
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
