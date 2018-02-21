@@ -7,12 +7,14 @@ using Com.Danliris.Service.Spinning.Lib.ViewModels;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Com.Danliris.Service.Spinning.WebApi.Controllers.v1.BasicControllers
 {
     [Produces("application/json")]
     [ApiVersion("1.0")]
     [Route("v{version:apiVersion}/LotYarn")]
+    [Authorize]
     public class LotYarnController : BasicController<SpinningDbContext, LotYarnService, LotYarnViewModel, LotYarn>
     {
         private static readonly string ApiVersion = "1.0";
