@@ -225,7 +225,7 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
                 models = await this.DbSet.Where(data => String.Equals(data.UnitName, unit) && (data.Date >= dateFrom && data.Date <= dateTo) && !data._IsDeleted).OrderByDescending(x => x._LastModifiedUtc).ToListAsync();
 
             }
-            else
+            else if(unit =="all")
             {
                 models = await this.DbSet.Where(data => (data.Date >= dateFrom && data.Date <= dateTo) && !data._IsDeleted).OrderByDescending(x => x._LastModifiedUtc).ToListAsync();
             }
