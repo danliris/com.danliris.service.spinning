@@ -74,13 +74,13 @@ namespace Com.Danliris.Service.Spinning.WebApi.Controllers.v1.BasicControllers
         }
 
 
-        [HttpGet("download/{unit}/{dateFrom}/{dateTo}")]
-        public async Task<IActionResult> downloadXls([FromRoute] string unit, [FromRoute] string dateFrom, [FromRoute] string dateTo)
+        [HttpGet("download/{unit}/{yarn}/{dateFrom}/{dateTo}")]
+        public async Task<IActionResult> downloadXls([FromRoute] string unit, [FromRoute] string yarn, [FromRoute] string dateFrom, [FromRoute] string dateTo)
         {
 
             try
             {
-                var data = await Service.getDataXls(unit, dateFrom, dateTo);
+                var data = await Service.getDataXls(unit, yarn, dateFrom, dateTo);
                 byte[] xlsInBytes;
                 var xls = Service.GenerateExcel(data);
 
@@ -100,12 +100,12 @@ namespace Com.Danliris.Service.Spinning.WebApi.Controllers.v1.BasicControllers
             }
         }
 
-        [HttpGet("report/{unit}/{dateFrom}/{dateTo}")]
-        public async Task<IActionResult> GetReportList([FromRoute] string unit, [FromRoute] string dateFrom, [FromRoute] string dateTo)
+        [HttpGet("report/{unit}/{yarn}/{dateFrom}/{dateTo}")]
+        public async Task<IActionResult> GetReportList([FromRoute] string unit, [FromRoute] string yarn, [FromRoute] string dateFrom, [FromRoute] string dateTo)
         {
             try
             {
-                var data = await Service.getDataXls(unit, dateFrom, dateTo);
+                var data = await Service.getDataXls(unit, yarn, dateFrom, dateTo);
                 Dictionary<string, object> Result =
                     new ResultFormatter(ApiVersion, General.OK_STATUS_CODE, General.OK_MESSAGE)
                     .Ok(data);

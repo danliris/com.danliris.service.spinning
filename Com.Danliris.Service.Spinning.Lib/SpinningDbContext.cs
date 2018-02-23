@@ -16,7 +16,7 @@ namespace Com.Danliris.Service.Spinning.Lib
 
         public DbSet<Yarn> Yarns { get; set; }
         public DbSet<LotYarn> LotYarns { get; set; }
-        public DbSet<SpinningInputProduction> SpinningInputProductions { get; set; }
+        public DbSet<SpinningInputProduction> WinderInputProductions { get; set; }
         public DbSet<WinderOutputProduction> WinderOutputProductions { get; set; }
 
 
