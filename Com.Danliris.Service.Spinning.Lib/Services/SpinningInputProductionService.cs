@@ -62,7 +62,7 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
             model.Lot = viewModel.Lot;
             model.Counter = (double)viewModel.Counter;
             model.Hank = (double)viewModel.Hank;
-            model.Bale = ((double)viewModel.Hank/(double)viewModel.Yarn.Ne/400);
+            model.Bale = Math.Round(((double)viewModel.Hank/(double)viewModel.Yarn.Ne/400));
 
             return model;
         }
@@ -247,7 +247,7 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
                    }).ToList();
 
             List<ReportData> results = tempData
-                .GroupBy(g => new { g.Unit, g.Yarn, g.Machine })
+                .GroupBy(g => new { g.Unit, g.Yarn, g.Machine , g.Date })
                 .Select(x => new ReportData
                 {
                     Date = x.First().Date,
@@ -271,18 +271,18 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
             DataTable result = new DataTable();
             result.Columns.Add(new DataColumn() { ColumnName = "Date", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Unit Name", DataType = typeof(String) });
-            result.Columns.Add(new DataColumn() { ColumnName = "Machine Name", DataType = typeof(String) });
+            //result.Columns.Add(new DataColumn() { ColumnName = "Machine Name", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Yarn Name", DataType = typeof(String) });
-            result.Columns.Add(new DataColumn() { ColumnName = "Lot", DataType = typeof(String) });
+            //result.Columns.Add(new DataColumn() { ColumnName = "Lot", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Shift I", DataType = typeof(double) });
             result.Columns.Add(new DataColumn() { ColumnName = "Shift II", DataType = typeof(double) });
             result.Columns.Add(new DataColumn() { ColumnName = "Shift III", DataType = typeof(double) });
             result.Columns.Add(new DataColumn() { ColumnName = "Total", DataType = typeof(double) });
             if (data.Count == 0)
-                result.Rows.Add("", "", "", "", "", "", "", "", "", ""); // to allow column name to be generated properly for empty data as template
+                result.Rows.Add("", "", "", "", "", "", "", ""); // to allow column name to be generated properly for empty data as template
             else
             foreach (var item in data)
-            result.Rows.Add((item.Date), item.Unit,item.Machine,item.Yarn,item.Lot,item.FirstShift,item.SecondShift,item.ThirdShift,item.Total);
+            result.Rows.Add((item.Date), item.Unit,item.Yarn,item.FirstShift,item.SecondShift,item.ThirdShift,item.Total);
 
             return Excel.CreateExcel(new List<KeyValuePair<DataTable, string>>() { new KeyValuePair<DataTable, string>(result, "Territory") }, true);
         }
