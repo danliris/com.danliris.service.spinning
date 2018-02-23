@@ -69,7 +69,7 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
 
         public override Tuple<List<SpinningInputProduction>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
         {
-            IQueryable<SpinningInputProduction> Query = this.DbContext.SpinningInputProductions;
+            IQueryable<SpinningInputProduction> Query = this.DbContext.WinderInputProductions;
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Order);
 
             if (Keyword != null)
