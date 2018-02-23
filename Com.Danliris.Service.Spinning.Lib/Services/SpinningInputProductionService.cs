@@ -32,6 +32,7 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
             viewModel.Yarn = new SpinningInputProductionViewModel.yarn();
             viewModel.Yarn.Id = model.YarnId;
             viewModel.Yarn.Name = model.YarnName;
+            viewModel.Yarn.Ne = model.Ne;
             viewModel.Machine = new SpinningInputProductionViewModel.machine();
             viewModel.Machine._id = model.MachineId;
             viewModel.Machine.name = model.MachineName;
@@ -57,9 +58,11 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
             model.MachineName = viewModel.Machine.name;
             model.YarnId = viewModel.Yarn.Id;
             model.YarnName = viewModel.Yarn.Name;
+            model.Ne = (double)viewModel.Yarn.Ne;
             model.Lot = viewModel.Lot;
             model.Counter = (double)viewModel.Counter;
             model.Hank = (double)viewModel.Hank;
+            model.Bale = Math.Round(((double)viewModel.Hank/(double)viewModel.Yarn.Ne/400));
 
             return model;
         }
@@ -82,7 +85,7 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
             /* Const Select */
             List<string> SelectedFields = new List<string>()
             {
-               "Id","NomorInputProduksi","Yarn","Unit","Machine","Lot","Shift","Date","Counter","Hank"
+               "Id","NomorInputProduksi","Yarn","Unit","Machine","Lot","Shift","Date","Counter","Hank","Input"
             };
 
             Query = Query
@@ -101,6 +104,8 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
                     Date = o.Date,
                     Counter = o.Counter,
                     Hank = o.Hank,
+                    Ne = o.Ne,
+                    Bale=o.Bale,
                 });
 
             /* Order */
@@ -169,32 +174,115 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
             return created;
         }
 
-        public async Task<List<SpinningInputProduction>> getDataXls(string unit, string DateFrom, string DateTo)
+        private class xlsVM
         {
 
-            List<SpinningInputProduction> result = new List<SpinningInputProduction>();
-            DateTime dateFrom = Convert.ToDateTime(DateFrom);
-            DateTime dateTo = Convert.ToDateTime(DateTo);
-            result = await this.DbSet.Where(data => String.Equals(data.UnitName, unit) && (data.Date >= dateFrom && data.Date <= dateTo) && !data._IsDeleted).OrderByDescending(x => x._LastModifiedUtc).ToListAsync();
-
-            return result;
         }
 
-        public MemoryStream GenerateExcel(List<SpinningInputProduction> data)
+        //public async Task<List<SpinningInputProduction>> getDataXls(string unit, string DateFrom, string DateTo)
+        //{
+
+        //    List<SpinningInputProduction> result = new List<SpinningInputProduction>();
+        //    DateTime dateFrom = Convert.ToDateTime(DateFrom);
+        //    DateTime dateTo = Convert.ToDateTime(DateTo);
+        //    result = await this.DbSet.Where(data => String.Equals(data.UnitName, unit) && (data.Date >= dateFrom && data.Date <= dateTo) && !data._IsDeleted).OrderByDescending(x => x._LastModifiedUtc).ToListAsync();
+
+        //    return result;
+        //}
+
+        public class TempData
+        {
+            public string Unit { get; set; }
+            public DateTime Date { get; set; }
+            public string Yarn { get; set; }
+            public string Machine { get; set; }
+            public string Shift { get; set; }
+            public double Ne { get; set; }
+            public double Counter { get; set; }
+            public double Hank { get; set; }
+            public double Bale { get; set; }
+            public string Lot { get; set; }
+        }
+        public class ReportData
+        {
+            public string Unit { get; set; }
+            public DateTime Date { get; set; }
+            public string Yarn { get; set; }
+            public string Machine { get; set; }
+            public double FirstShift { get; set; }
+            public double SecondShift { get; set; }
+            public double ThirdShift { get; set; }
+            public double Total { get; set; }
+            public string Lot { get; set; }
+        }
+        public async Task<List<ReportData>> getDataXls(string unit , string DateFrom, string DateTo)
+        {
+            List<SpinningInputProduction> models = new List<SpinningInputProduction>();
+            DateTime dateFrom = Convert.ToDateTime(DateFrom);
+            DateTime dateTo = Convert.ToDateTime(DateTo);
+            if (unit !="all")
+            {
+                models = await this.DbSet.Where(data => String.Equals(data.UnitName, unit) && (data.Date >= dateFrom && data.Date <= dateTo) && !data._IsDeleted).OrderByDescending(x => x._LastModifiedUtc).ToListAsync();
+
+            }
+            else if(unit =="all")
+            {
+                models = await this.DbSet.Where(data => (data.Date >= dateFrom && data.Date <= dateTo) && !data._IsDeleted).OrderByDescending(x => x._LastModifiedUtc).ToListAsync();
+            }
+
+            List<TempData> tempData = models
+                   .GroupBy(g => new { g.UnitName, g.Shift, g.Date, g.YarnName,g.MachineName })
+                   .Select(x => new TempData
+                   {
+                       Date = x.First().Date,
+                       Unit = x.First().UnitName,
+                       Machine = x.First().MachineName,
+                       Yarn = x.First().YarnName,
+                       Shift = x.First().Shift,
+                       Counter = x.Sum(s => s.Counter),
+                       Hank = x.Sum(s => s.Hank),
+                       Ne = x.Sum(s=>s.Ne),
+                       Bale = x.Sum(s=>s.Bale),
+                       Lot=x.First().Lot,
+                   }).ToList();
+
+            List<ReportData> results = tempData
+                .GroupBy(g => new { g.Unit, g.Yarn, g.Machine , g.Date })
+                .Select(x => new ReportData
+                {
+                    Date = x.First().Date,
+                    Unit = x.First().Unit,
+                    Machine = x.First().Machine,
+                    Yarn = x.First().Yarn,
+                    Lot=x.First().Lot,
+                    FirstShift = x.Where(c => String.Equals(c.Shift, "Shift I: 06.00 – 14.00")).Sum(s => s.Bale),
+                    
+                    SecondShift = x.Where(c => String.Equals(c.Shift, "Shift II: 14.00 – 22.00")).Sum(s => s.Bale),
+                  
+                    ThirdShift = x.Where(c => String.Equals(c.Shift, "Shift III: 22:00 – 06.00")).Sum(s => s.Bale),
+                 
+                    Total = (x.Sum(s => s.Bale))
+                }).ToList();
+            return results;
+        }
+
+        public MemoryStream GenerateExcel(List<ReportData> data)
         {
             DataTable result = new DataTable();
-            result.Columns.Add(new DataColumn() { ColumnName = "NomorInputProduksi", DataType = typeof(String) });
-            result.Columns.Add(new DataColumn() { ColumnName = "Yarn Name", DataType = typeof(String) });
-            result.Columns.Add(new DataColumn() { ColumnName = "Date", DataType = typeof(DateTime) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Date", DataType = typeof(String) });
             result.Columns.Add(new DataColumn() { ColumnName = "Unit Name", DataType = typeof(String) });
-            result.Columns.Add(new DataColumn() { ColumnName = "Machine Name", DataType = typeof(String) });
-            result.Columns.Add(new DataColumn() { ColumnName = "Lot", DataType = typeof(String) });
-            result.Columns.Add(new DataColumn() { ColumnName = "Shift", DataType = typeof(String) });
+            //result.Columns.Add(new DataColumn() { ColumnName = "Machine Name", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Yarn Name", DataType = typeof(String) });
+            //result.Columns.Add(new DataColumn() { ColumnName = "Lot", DataType = typeof(String) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Shift I", DataType = typeof(double) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Shift II", DataType = typeof(double) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Shift III", DataType = typeof(double) });
+            result.Columns.Add(new DataColumn() { ColumnName = "Total", DataType = typeof(double) });
             if (data.Count == 0)
-                result.Rows.Add("","","","","","",""); // to allow column name to be generated properly for empty data as template
+                result.Rows.Add("", "", "", "", "", "", "", ""); // to allow column name to be generated properly for empty data as template
             else
-                foreach (var item in data)
-            result.Rows.Add(item.NomorInputProduksi, item.YarnName,item.Date,item.UnitName,item.MachineName,item.Lot,item.Shift);
+            foreach (var item in data)
+            result.Rows.Add((item.Date), item.Unit,item.Yarn,item.FirstShift,item.SecondShift,item.ThirdShift,item.Total);
 
             return Excel.CreateExcel(new List<KeyValuePair<DataTable, string>>() { new KeyValuePair<DataTable, string>(result, "Territory") }, true);
         }

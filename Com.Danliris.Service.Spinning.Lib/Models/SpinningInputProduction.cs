@@ -22,7 +22,8 @@ namespace Com.Danliris.Service.Spinning.Lib.Models
         public string Lot { get; set; }
         public double Counter { get; set; }
         public double Hank { get; set; }
-
+        public double Ne { get; set; }
+        public double Bale { get; set; }
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             return new List<ValidationResult>();
