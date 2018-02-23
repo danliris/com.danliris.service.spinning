@@ -7,27 +7,27 @@ using System.Threading.Tasks;
 
 namespace Com.Danliris.Service.Spinning.Test.DataUtils
 {
-    class YarnOutputProductionServiceDataUtil
+    class WinderOutputProductionServiceDataUtil
     {
         public SpinningDbContext DbContext { get; set; }
 
-        public YarnOutputProductionService YarnOutputProductionService { get; set; }
+        public WinderOutputProductionService WinderOutputProductionService { get; set; }
 
-        public YarnOutputProductionServiceDataUtil(SpinningDbContext dbContext, YarnOutputProductionService yarnOutputProductionService)
+        public WinderOutputProductionServiceDataUtil(SpinningDbContext dbContext, WinderOutputProductionService winderOutputProductionService)
         {
             this.DbContext = dbContext;
-            this.YarnOutputProductionService = yarnOutputProductionService;
+            this.WinderOutputProductionService = winderOutputProductionService;
         }
 
-        public Task<YarnOutputProduction> GetTestYarnOutputProduction()
+        public Task<WinderOutputProduction> GetTestYarnOutputProduction()
         {
-            YarnOutputProduction testYarnOutputProduction = YarnOutputProductionService.DbSet.FirstOrDefault(yarnOutputProduction => yarnOutputProduction.Code == "Test");
+            WinderOutputProduction testWinderOutputProduction = WinderOutputProductionService.DbSet.FirstOrDefault(yarnOutputProduction => yarnOutputProduction.Code == "Test");
 
-            if (testYarnOutputProduction != null)
-                return Task.FromResult(testYarnOutputProduction);
+            if (testWinderOutputProduction != null)
+                return Task.FromResult(testWinderOutputProduction);
             else
             {
-                testYarnOutputProduction = new YarnOutputProduction()
+                testWinderOutputProduction = new WinderOutputProduction()
                 {
                     Code = "Test",
                     Date = DateTime.Now,
@@ -47,8 +47,8 @@ namespace Com.Danliris.Service.Spinning.Test.DataUtils
                     YarnName = "Test",
                     YarnWeightPerCone = 1
                 };
-                YarnOutputProductionService.Create(testYarnOutputProduction);
-                return YarnOutputProductionService.GetAsync(testYarnOutputProduction.Id);
+                WinderOutputProductionService.Create(testWinderOutputProduction);
+                return WinderOutputProductionService.GetAsync(testWinderOutputProduction.Id);
             }
         }
     }

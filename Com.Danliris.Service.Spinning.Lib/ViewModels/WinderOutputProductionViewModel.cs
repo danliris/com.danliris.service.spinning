@@ -5,7 +5,7 @@ using System;
 
 namespace Com.Danliris.Service.Spinning.Lib.ViewModels
 {
-    public class YarnOutputProductionViewModel : BasicViewModel, IValidatableObject
+    public class WinderOutputProductionViewModel : BasicViewModel, IValidatableObject
     {
         public string Code { get; set; }
         public SpinningVm Spinning { get; set; }

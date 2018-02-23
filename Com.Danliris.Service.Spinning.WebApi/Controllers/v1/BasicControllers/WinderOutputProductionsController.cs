@@ -12,10 +12,10 @@ namespace Com.Danliris.Service.Spinning.WebApi.Controllers.v1.BasicControllers
     [ApiVersion("1.0")]
     [Route("v{version:apiVersion}/yarn-output-productions")]
     [Authorize]
-    public class YarnOutputProductionsController : BasicController<SpinningDbContext, YarnOutputProductionService, YarnOutputProductionViewModel, YarnOutputProduction>
+    public class WinderOutputProductionsController : BasicController<SpinningDbContext, WinderOutputProductionService, WinderOutputProductionViewModel, WinderOutputProduction>
     {
         private static readonly string ApiVersion = "1.0";
-        public YarnOutputProductionsController(YarnOutputProductionService service) : base(service, ApiVersion)
+        public WinderOutputProductionsController(WinderOutputProductionService service) : base(service, ApiVersion)
         {
         }
     }

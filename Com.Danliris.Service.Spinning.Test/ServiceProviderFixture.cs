@@ -25,10 +25,10 @@ namespace Com.Danliris.Service.Spinning.Test
                 {
                     options.UseSqlServer(connectionString);
                 }, ServiceLifetime.Transient)
-                .AddTransient<YarnService>(provider => new YarnService(provider))
-                .AddTransient<YarnOutputProductionService>(provider => new YarnOutputProductionService(provider))
+                .AddTransient(provider => new YarnService(provider))
+                .AddTransient(provider => new WinderOutputProductionService(provider))
                 .AddTransient<YarnServiceDataUtil>()
-                .AddTransient<YarnOutputProductionServiceDataUtil>()
+                .AddTransient<WinderOutputProductionServiceDataUtil>()
                 .BuildServiceProvider();
 
             SpinningDbContext dbContext = ServiceProvider.GetService<SpinningDbContext>();

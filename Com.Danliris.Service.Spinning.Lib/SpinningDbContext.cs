@@ -17,7 +17,7 @@ namespace Com.Danliris.Service.Spinning.Lib
         public DbSet<Yarn> Yarns { get; set; }
         public DbSet<LotYarn> LotYarns { get; set; }
         public DbSet<SpinningInputProduction> SpinningInputProductions { get; set; }
-        public DbSet<YarnOutputProduction> YarnOutputProductions { get; set; }
+        public DbSet<WinderOutputProduction> WinderOutputProductions { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -27,7 +27,7 @@ namespace Com.Danliris.Service.Spinning.Lib
             modelBuilder.ApplyConfiguration(new YarnConfig());
             modelBuilder.ApplyConfiguration(new LotYarnConfig());
             modelBuilder.ApplyConfiguration(new SpinningInputProductionConfig());
-            modelBuilder.ApplyConfiguration(new YarnOutputProductionConfig());
+            modelBuilder.ApplyConfiguration(new WinderOutputProductionConfig());
 
         }
     }

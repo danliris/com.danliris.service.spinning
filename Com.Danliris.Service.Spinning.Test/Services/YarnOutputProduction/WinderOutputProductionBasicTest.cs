@@ -8,28 +8,28 @@ using Com.Danliris.Service.Spinning.Test.Helpers;
 namespace Com.Danliris.Service.Spinning.Test.Services.YarnOutputProduction
 {
     [Collection("ServiceProviderFixture collection")]
-    public class YarnOutputProductionBasicTest : BasicServiceTest<SpinningDbContext, YarnOutputProductionService, Models.YarnOutputProduction>
+    public class WinderOutputProductionBasicTest : BasicServiceTest<SpinningDbContext, WinderOutputProductionService, Models.WinderOutputProduction>
     {
         private static readonly string[] createAttrAssertions = { };
         private static readonly string[] updateAttrAssertions = { };
         private static readonly string[] existAttrCriteria = { };
 
-        public YarnOutputProductionBasicTest(ServiceProviderFixture fixture) : base(fixture, createAttrAssertions, updateAttrAssertions, existAttrCriteria)
+        public WinderOutputProductionBasicTest(ServiceProviderFixture fixture) : base(fixture, createAttrAssertions, updateAttrAssertions, existAttrCriteria)
         {
         }
 
-        public override void EmptyCreateModel(Models.YarnOutputProduction model)
+        public override void EmptyCreateModel(Models.WinderOutputProduction model)
         {
         }
 
-        public override void EmptyUpdateModel(Models.YarnOutputProduction model)
+        public override void EmptyUpdateModel(Models.WinderOutputProduction model)
         {
         }
 
-        public override Models.YarnOutputProduction GenerateTestModel()
+        public override Models.WinderOutputProduction GenerateTestModel()
         {
             string guid = Guid.NewGuid().ToString();
-            return new Models.YarnOutputProduction()
+            return new Models.WinderOutputProduction()
             {
                 Code = guid
             };
