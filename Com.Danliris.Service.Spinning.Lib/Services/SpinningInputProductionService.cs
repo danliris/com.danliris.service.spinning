@@ -69,7 +69,7 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
 
         public override Tuple<List<SpinningInputProduction>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
         {
-            IQueryable<SpinningInputProduction> Query = this.DbContext.SpinningInputProductions;
+            IQueryable<SpinningInputProduction> Query = this.DbContext.WinderInputProductions;
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Order);
 
             if (Keyword != null)
@@ -215,17 +215,28 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
             public double Total { get; set; }
             public string Lot { get; set; }
         }
-        public async Task<List<ReportData>> getDataXls(string unit , string DateFrom, string DateTo)
+        public async Task<List<ReportData>> getDataXls(string unit , string yarn , string DateFrom, string DateTo)
         {
             List<SpinningInputProduction> models = new List<SpinningInputProduction>();
             DateTime dateFrom = Convert.ToDateTime(DateFrom);
             DateTime dateTo = Convert.ToDateTime(DateTo);
-            if (unit !="all")
+            if (unit !="all" && yarn !="all")
+            {
+                string yarnFilter = yarn;
+                models = await this.DbSet.Where(data => String.Equals(data.UnitName, unit)&& String.Equals(data.YarnName, yarn) && (data.Date >= dateFrom && data.Date <= dateTo) && !data._IsDeleted).OrderByDescending(x => x._LastModifiedUtc).ToListAsync();
+
+            }
+            else if (yarn == "all" && unit != "all")
             {
                 models = await this.DbSet.Where(data => String.Equals(data.UnitName, unit) && (data.Date >= dateFrom && data.Date <= dateTo) && !data._IsDeleted).OrderByDescending(x => x._LastModifiedUtc).ToListAsync();
 
             }
-            else if(unit =="all")
+            else if (yarn != "all" && unit == "all")
+            {
+                models = await this.DbSet.Where(data => String.Equals(data.YarnName, yarn) && (data.Date >= dateFrom && data.Date <= dateTo) && !data._IsDeleted).OrderByDescending(x => x._LastModifiedUtc).ToListAsync();
+
+            }
+            else if(unit =="all" && yarn =="all")
             {
                 models = await this.DbSet.Where(data => (data.Date >= dateFrom && data.Date <= dateTo) && !data._IsDeleted).OrderByDescending(x => x._LastModifiedUtc).ToListAsync();
             }
