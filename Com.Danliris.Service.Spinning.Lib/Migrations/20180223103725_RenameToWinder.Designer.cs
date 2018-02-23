@@ -11,7 +11,7 @@ using System;
 namespace Com.Danliris.Service.Spinning.Lib.Migrations
 {
     [DbContext(typeof(SpinningDbContext))]
-    [Migration("20180223080127_RenameToWinder")]
+    [Migration("20180223103725_RenameToWinder")]
     partial class RenameToWinder
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -108,6 +108,8 @@ namespace Com.Danliris.Service.Spinning.Lib.Migrations
 
                     b.Property<bool>("Active");
 
+                    b.Property<double>("Bale");
+
                     b.Property<double>("Counter");
 
                     b.Property<DateTime>("Date");
@@ -121,6 +123,8 @@ namespace Com.Danliris.Service.Spinning.Lib.Migrations
 
                     b.Property<string>("MachineName")
                         .HasMaxLength(500);
+
+                    b.Property<double>("Ne");
 
                     b.Property<string>("NomorInputProduksi")
                         .HasMaxLength(100);
@@ -174,7 +178,7 @@ namespace Com.Danliris.Service.Spinning.Lib.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SpinningInputProductions");
+                    b.ToTable("WinderInputProductions");
                 });
 
             modelBuilder.Entity("Com.Danliris.Service.Spinning.Lib.Models.WinderOutputProduction", b =>
