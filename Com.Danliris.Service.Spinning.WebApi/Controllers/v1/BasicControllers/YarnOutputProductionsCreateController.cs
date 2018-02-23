@@ -9,12 +9,14 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Com.Moonlay.NetCore.Lib.Service;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Com.Danliris.Service.Spinning.WebApi.Controllers.v1.BasicControllers
 {
     [Produces("application/json")]
     [ApiVersion("1.0")]
     [Route("v{version:apiVersion}/yarn-output-production")]
+    [Authorize]
     public class YarnOutputProductionsCreateController : BasicController<SpinningDbContext, YarnOutputProductionService, YarnOutputProductionViewModel, YarnOutputProduction>
     {
         private static readonly string ApiVersion = "1.0";
@@ -67,6 +69,60 @@ namespace Com.Danliris.Service.Spinning.WebApi.Controllers.v1.BasicControllers
                     new ResultFormatter(ApiVersion, General.BAD_REQUEST_STATUS_CODE, General.BAD_REQUEST_MESSAGE)
                     .Fail(e);
                 return BadRequest(Result);
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, General.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
+        [HttpGet("download")]
+        public async Task<IActionResult> DownloadXls(string Unit, string Yarn, DateTime? DateFrom, DateTime? DateTo)
+        {
+
+            try
+            {
+                Unit = String.IsNullOrWhiteSpace(Unit) ? "All" : Unit;
+                Yarn = String.IsNullOrWhiteSpace(Yarn) ? "All" : Yarn;
+                DateTime dateFrom = DateFrom == null ? new DateTime(1900, 1, 1) : Convert.ToDateTime(DateFrom);
+                DateTime dateTo = DateTo == null ? DateTime.Now : Convert.ToDateTime(DateTo);
+                var data = await Service.getData(Unit, Yarn, dateFrom, dateTo);
+                byte[] xlsInBytes;
+                var xls = Service.GenerateExcel(data);
+
+                string filename = DateFrom == null || DateTo == null ? $"Spinning Output Production Report {DateTime.Now:dd-MM-yyyy}.xlsx" : $"Spinning Output Production Report {dateFrom:dd-MM-yyyy} to {dateTo:dd-MM-yyyy}.xlsx";
+
+                xlsInBytes = xls.ToArray();
+                var file = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
+                return file;
+
+            }
+            catch (Exception e)
+            {
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, General.INTERNAL_ERROR_STATUS_CODE, e.Message)
+                    .Fail();
+                return StatusCode(General.INTERNAL_ERROR_STATUS_CODE, Result);
+            }
+        }
+
+        [HttpGet("report")]
+        public async Task<IActionResult> GetReportList(string Unit, string Yarn, DateTime? DateFrom, DateTime? DateTo)
+        {
+            try
+            {
+                Unit = String.IsNullOrWhiteSpace(Unit) ? "All" : Unit;
+                Yarn = String.IsNullOrWhiteSpace(Yarn) ? "All" : Yarn;
+                DateTime dateFrom = DateFrom == null ? new DateTime(1900, 1, 1) : Convert.ToDateTime(DateFrom);
+                DateTime dateTo = DateTo == null ? DateTime.Now : Convert.ToDateTime(DateTo);
+                var data = await Service.getData(Unit, Yarn, dateFrom, dateTo);
+                Dictionary<string, object> Result =
+                    new ResultFormatter(ApiVersion, General.OK_STATUS_CODE, General.OK_MESSAGE)
+                    .Ok(data);
+                return Ok(Result);
             }
             catch (Exception e)
             {

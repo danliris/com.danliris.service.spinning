@@ -262,6 +262,8 @@ __pycache__/
 
 # Launch Settings
 Com.Danliris.Service.Spinning.WebApi/Properties/launchSettings.json
+Com.Danliris.Service.Spinning.WebApi/appsettings.Development.json
+Com.Danliris.Service.Spinning.WebApi/appsettings.json
 
 #vscode
 .vscode/
