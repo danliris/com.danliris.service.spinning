@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Com.Danliris.Service.Spinning.Lib.Migrations
 {
-    public partial class spinningINput : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -46,24 +46,26 @@ namespace Com.Danliris.Service.Spinning.Lib.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SpinningInputProductions",
+                name: "WinderInputProductions",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Active = table.Column<bool>(nullable: false),
+                    Bale = table.Column<double>(nullable: false),
                     Counter = table.Column<double>(nullable: false),
                     Date = table.Column<DateTime>(nullable: false),
                     Hank = table.Column<double>(nullable: false),
                     Lot = table.Column<string>(nullable: true),
-                    MachineId = table.Column<string>(nullable: true),
-                    MachineName = table.Column<string>(nullable: true),
+                    MachineId = table.Column<string>(maxLength: 500, nullable: true),
+                    MachineName = table.Column<string>(maxLength: 500, nullable: true),
+                    Ne = table.Column<double>(nullable: false),
                     NomorInputProduksi = table.Column<string>(maxLength: 100, nullable: true),
-                    Shift = table.Column<string>(nullable: true),
-                    UnitId = table.Column<string>(nullable: true),
-                    UnitName = table.Column<string>(nullable: true),
-                    YarnId = table.Column<int>(nullable: false),
-                    YarnName = table.Column<string>(nullable: true),
+                    Shift = table.Column<string>(maxLength: 500, nullable: true),
+                    UnitId = table.Column<string>(maxLength: 500, nullable: true),
+                    UnitName = table.Column<string>(maxLength: 500, nullable: true),
+                    YarnId = table.Column<int>(maxLength: 100, nullable: false),
+                    YarnName = table.Column<string>(maxLength: 500, nullable: true),
                     _CreatedAgent = table.Column<string>(maxLength: 255, nullable: false),
                     _CreatedBy = table.Column<string>(maxLength: 255, nullable: false),
                     _CreatedUtc = table.Column<DateTime>(nullable: false),
@@ -77,11 +79,11 @@ namespace Com.Danliris.Service.Spinning.Lib.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SpinningInputProductions", x => x.Id);
+                    table.PrimaryKey("PK_WinderInputProductions", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "YarnOutputProductions",
+                name: "WinderOutputProductions",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -119,7 +121,7 @@ namespace Com.Danliris.Service.Spinning.Lib.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_YarnOutputProductions", x => x.Id);
+                    table.PrimaryKey("PK_WinderOutputProductions", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -156,10 +158,10 @@ namespace Com.Danliris.Service.Spinning.Lib.Migrations
                 name: "LotYarns");
 
             migrationBuilder.DropTable(
-                name: "SpinningInputProductions");
+                name: "WinderInputProductions");
 
             migrationBuilder.DropTable(
-                name: "YarnOutputProductions");
+                name: "WinderOutputProductions");
 
             migrationBuilder.DropTable(
                 name: "Yarns");

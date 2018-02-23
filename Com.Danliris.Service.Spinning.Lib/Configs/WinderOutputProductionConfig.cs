@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Com.Danliris.Service.Spinning.Lib.Configs
 {
-    public class YarnOutputProductionConfig : IEntityTypeConfiguration<YarnOutputProduction>
+    public class WinderOutputProductionConfig : IEntityTypeConfiguration<WinderOutputProduction>
     {
-        public void Configure(EntityTypeBuilder<YarnOutputProduction> builder)
+        public void Configure(EntityTypeBuilder<WinderOutputProduction> builder)
         {
             builder.Property(c => c.Code).HasMaxLength(100);
             builder.Property(c => c.SpinningName).HasMaxLength(500);

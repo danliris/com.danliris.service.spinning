@@ -11,8 +11,8 @@ using System;
 namespace Com.Danliris.Service.Spinning.Lib.Migrations
 {
     [DbContext(typeof(SpinningDbContext))]
-    [Migration("20180223095944_winderInputProduction")]
-    partial class winderInputProduction
+    [Migration("20180223112155_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -181,62 +181,7 @@ namespace Com.Danliris.Service.Spinning.Lib.Migrations
                     b.ToTable("WinderInputProductions");
                 });
 
-            modelBuilder.Entity("Com.Danliris.Service.Spinning.Lib.Models.Yarn", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<bool>("Active");
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(500);
-
-                    b.Property<double>("Ne");
-
-                    b.Property<string>("Remark")
-                        .HasMaxLength(500);
-
-                    b.Property<string>("_CreatedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("_CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("_CreatedUtc");
-
-                    b.Property<string>("_DeletedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("_DeletedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("_DeletedUtc");
-
-                    b.Property<bool>("_IsDeleted");
-
-                    b.Property<string>("_LastModifiedAgent")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("_LastModifiedBy")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<DateTime>("_LastModifiedUtc");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Yarns");
-                });
-
-            modelBuilder.Entity("Com.Danliris.Service.Spinning.Lib.Models.YarnOutputProduction", b =>
+            modelBuilder.Entity("Com.Danliris.Service.Spinning.Lib.Models.WinderOutputProduction", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -327,7 +272,62 @@ namespace Com.Danliris.Service.Spinning.Lib.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("YarnOutputProductions");
+                    b.ToTable("WinderOutputProductions");
+                });
+
+            modelBuilder.Entity("Com.Danliris.Service.Spinning.Lib.Models.Yarn", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("Active");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(500);
+
+                    b.Property<double>("Ne");
+
+                    b.Property<string>("Remark")
+                        .HasMaxLength(500);
+
+                    b.Property<string>("_CreatedAgent")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<string>("_CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("_CreatedUtc");
+
+                    b.Property<string>("_DeletedAgent")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<string>("_DeletedBy")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("_DeletedUtc");
+
+                    b.Property<bool>("_IsDeleted");
+
+                    b.Property<string>("_LastModifiedAgent")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<string>("_LastModifiedBy")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("_LastModifiedUtc");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Yarns");
                 });
 #pragma warning restore 612, 618
         }

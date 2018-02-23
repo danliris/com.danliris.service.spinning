@@ -15,15 +15,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Com.Danliris.Service.Spinning.Lib.Services
 {
-    public class YarnOutputProductionService : BasicService<SpinningDbContext, YarnOutputProduction>, IMap<YarnOutputProduction, YarnOutputProductionViewModel>
+    public class WinderOutputProductionService : BasicService<SpinningDbContext, WinderOutputProduction>, IMap<WinderOutputProduction, WinderOutputProductionViewModel>
     {
-        public YarnOutputProductionService(IServiceProvider serviceProvider) : base(serviceProvider)
+        public WinderOutputProductionService(IServiceProvider serviceProvider) : base(serviceProvider)
         {
         }
 
-        public override Tuple<List<YarnOutputProduction>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
+        public override Tuple<List<WinderOutputProduction>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}")
         {
-            IQueryable<YarnOutputProduction> Query = this.DbContext.YarnOutputProductions;
+            IQueryable<WinderOutputProduction> Query = this.DbContext.WinderOutputProductions;
 
             List<string> SearchAttributes = new List<string>()
                 {
@@ -36,7 +36,7 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
                     "Id", "Spinning", "Date", "Code", "Yarn", "LotYarn", "Shift", "Machine", "YarnWeightPerCone", "GoodOutput", "BadOutput", "DrumTotal",
                 };
             Query = Query
-                .Select(output => new YarnOutputProduction
+                .Select(output => new WinderOutputProduction
                 {
                     Id = output.Id,
                     Code = output.Code,
@@ -66,14 +66,14 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(Order);
             Query = ConfigureOrder(Query, OrderDictionary);
 
-            Pageable<YarnOutputProduction> pageable = new Pageable<YarnOutputProduction>(Query, Page - 1, Size);
-            List<YarnOutputProduction> Data = pageable.Data.ToList<YarnOutputProduction>();
+            Pageable<WinderOutputProduction> pageable = new Pageable<WinderOutputProduction>(Query, Page - 1, Size);
+            List<WinderOutputProduction> Data = pageable.Data.ToList();
             int TotalData = pageable.TotalCount;
 
             return Tuple.Create(Data, TotalData, OrderDictionary, SelectedFields);
         }
 
-        public override void OnCreating(YarnOutputProduction model)
+        public override void OnCreating(WinderOutputProduction model)
         {
             do
             {
@@ -84,14 +84,14 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
             base.OnCreating(model);
         }
 
-        public async Task<int> CreateModels(List<YarnOutputProduction> models)
+        public async Task<int> CreateModels(List<WinderOutputProduction> models)
         {
             int created = 0;
             using (var transaction = this.DbContext.Database.BeginTransaction())
             {
                 try
                 {
-                    foreach (YarnOutputProduction model in models)
+                    foreach (WinderOutputProduction model in models)
                     {
                         created = await this.CreateAsync(model);
                     }
@@ -106,25 +106,25 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
             return created;
         }
 
-        public YarnOutputProductionViewModel MapToViewModel(YarnOutputProduction model)
+        public WinderOutputProductionViewModel MapToViewModel(WinderOutputProduction model)
         {
-            YarnOutputProductionViewModel viewModel = new YarnOutputProductionViewModel();
-            PropertyCopier<YarnOutputProduction, YarnOutputProductionViewModel>.Copy(model, viewModel);
+            WinderOutputProductionViewModel viewModel = new WinderOutputProductionViewModel();
+            PropertyCopier<WinderOutputProduction, WinderOutputProductionViewModel>.Copy(model, viewModel);
             viewModel.Date = model.Date;
             viewModel.Shift = model.Shift;
-            viewModel.Yarn = new YarnOutputProductionViewModel.YarnVM();
+            viewModel.Yarn = new WinderOutputProductionViewModel.YarnVM();
             viewModel.Yarn.Id = model.YarnId;
             viewModel.Yarn.Code = model.YarnCode;
             viewModel.Yarn.Name = model.YarnName;
-            viewModel.Spinning = new YarnOutputProductionViewModel.SpinningVm();
+            viewModel.Spinning = new WinderOutputProductionViewModel.SpinningVm();
             viewModel.Spinning._id = model.SpinningId;
             viewModel.Spinning.code = model.SpinningCode;
             viewModel.Spinning.name = model.SpinningName;
-            viewModel.Machine = new YarnOutputProductionViewModel.MachineVM();
+            viewModel.Machine = new WinderOutputProductionViewModel.MachineVM();
             viewModel.Machine._id = model.MachineId;
             viewModel.Machine.code = model.MachineCode;
             viewModel.Machine.name = model.MachineName;
-            viewModel.LotYarn = new YarnOutputProductionViewModel.LotYarnVM();
+            viewModel.LotYarn = new WinderOutputProductionViewModel.LotYarnVM();
             viewModel.LotYarn.Id = model.LotYarnId;
             viewModel.LotYarn.Code = model.LotYarnCode;
             viewModel.LotYarn.Lot = model.LotYarnName;
@@ -135,10 +135,10 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
             return viewModel;
         }
 
-        public YarnOutputProduction MapToModel(YarnOutputProductionViewModel viewModel)
+        public WinderOutputProduction MapToModel(WinderOutputProductionViewModel viewModel)
         {
-            YarnOutputProduction model = new YarnOutputProduction();
-            PropertyCopier<YarnOutputProductionViewModel, YarnOutputProduction>.Copy(viewModel, model);
+            WinderOutputProduction model = new WinderOutputProduction();
+            PropertyCopier<WinderOutputProductionViewModel, WinderOutputProduction>.Copy(viewModel, model);
             model.Date = (DateTime)viewModel.Date;
             model.Shift = viewModel.Shift;
             model.YarnId = viewModel.Yarn.Id != null ? (int)viewModel.Yarn.Id : 0;
@@ -189,7 +189,7 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
 
         public async Task<List<ReportData>> getData(string SpinningName, string YarnName, DateTime DateFrom, DateTime DateTo)
         {
-            List<YarnOutputProduction> models = new List<YarnOutputProduction>();
+            List<WinderOutputProduction> models = new List<WinderOutputProduction>();
             models = await this.DbSet.Where(data => (data.Date >= DateFrom && data.Date <= DateTo) && !data._IsDeleted).OrderByDescending(x => x._LastModifiedUtc).ToListAsync();
             
             if (!String.Equals(SpinningName.ToUpper(), "ALL"))

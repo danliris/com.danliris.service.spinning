@@ -1,14 +1,11 @@
-﻿using Com.Danliris.Service.Spinning.Lib.Services;
-using Com.Moonlay.Models;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Com.Moonlay.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 
 namespace Com.Danliris.Service.Spinning.Lib.Models
 {
-    public class YarnOutputProduction : StandardEntity, IValidatableObject
+    public class WinderOutputProduction : StandardEntity, IValidatableObject
     {
         public string Code { get; set; }
         public string SpinningId { get; set; }

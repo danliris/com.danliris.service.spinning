@@ -42,7 +42,7 @@ namespace Com.Danliris.Service.Spinning.WebApi
                 .AddTransient<YarnService>()
                 .AddTransient<LotYarnService>()
                 .AddTransient<SpinningInputProductionService>()
-                .AddTransient<YarnOutputProductionService>();
+                .AddTransient<WinderOutputProductionService>();
 
 
             //services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
