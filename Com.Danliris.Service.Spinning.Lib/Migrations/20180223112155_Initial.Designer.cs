@@ -11,8 +11,8 @@ using System;
 namespace Com.Danliris.Service.Spinning.Lib.Migrations
 {
     [DbContext(typeof(SpinningDbContext))]
-    [Migration("20180223103725_RenameToWinder")]
-    partial class RenameToWinder
+    [Migration("20180223112155_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

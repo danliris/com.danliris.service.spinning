@@ -19,9 +19,9 @@ namespace Com.Danliris.Service.Spinning.Test.DataUtils
             this.WinderOutputProductionService = winderOutputProductionService;
         }
 
-        public Task<WinderOutputProduction> GetTestYarnOutputProduction()
+        public Task<WinderOutputProduction> GetTestWinderOutputProduction()
         {
-            WinderOutputProduction testWinderOutputProduction = WinderOutputProductionService.DbSet.FirstOrDefault(yarnOutputProduction => yarnOutputProduction.Code == "Test");
+            WinderOutputProduction testWinderOutputProduction = WinderOutputProductionService.DbSet.FirstOrDefault(winderOutputProduction => winderOutputProduction.Code == "Test");
 
             if (testWinderOutputProduction != null)
                 return Task.FromResult(testWinderOutputProduction);
