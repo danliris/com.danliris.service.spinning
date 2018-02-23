@@ -43,8 +43,7 @@ namespace Com.Danliris.Service.Spinning.WebApi.Controllers.v1.BasicControllers
                     model.MachineName = ViewModel.Machine.name;
                     model.Lot = ViewModel.Lot;
                     model.Ne = ViewModel.Yarn.Ne;
-                    model.Bale = ((double)data.Hank / (double)ViewModel.Yarn.Ne / 400);
-
+                    model.Bale = Math.Round((double)data.Hank / (double)ViewModel.Yarn.Ne / 400);
                     model.Counter = (double)data.Counter;
                     model.Hank = (double)data.Hank;
 
