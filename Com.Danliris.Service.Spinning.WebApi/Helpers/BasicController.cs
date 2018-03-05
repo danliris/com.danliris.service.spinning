@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using Com.Moonlay.NetCore.Lib.Service;
 using Com.Danliris.Service.Spinning.Lib.Interfaces;
 using Com.Danliris.Service.Spinning.Lib.Helpers;
+using System.Linq;
 
 namespace Com.Danliris.Service.Spinning.WebApi.Helpers
 {
@@ -88,6 +89,7 @@ namespace Com.Danliris.Service.Spinning.WebApi.Helpers
             try
             {
                 this.Validate(ViewModel);
+                Service.Username = User.Claims.Single(p => p.Type.Equals("username")).Value;
                 TModel model = Service.MapToModel(ViewModel);
 
                 if (!ModelState.IsValid)
@@ -146,6 +148,7 @@ namespace Com.Danliris.Service.Spinning.WebApi.Helpers
             try
             {
                 this.Validate(ViewModel);
+                Service.Username = User.Claims.Single(p => p.Type.Equals("username")).Value;
                 TModel model = Service.MapToModel(ViewModel);
 
                 await Service.CreateModel(model);
@@ -181,6 +184,7 @@ namespace Com.Danliris.Service.Spinning.WebApi.Helpers
 
             try
             {
+                Service.Username = User.Claims.Single(p => p.Type.Equals("username")).Value;
                 await Service.DeleteModel(Id);
 
                 return NoContent();
