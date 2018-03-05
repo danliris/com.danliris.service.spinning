@@ -32,7 +32,13 @@ namespace Com.Danliris.Service.Spinning.Test.Helpers
 
         protected TService Service
         {
-            get { return this.ServiceProvider.GetService<TService>(); }
+            get
+            {
+                TService service = (TService)this.ServiceProvider.GetService(typeof(TService));
+                service.Username = "Unit Test";
+
+                return service;
+            }
         }
 
         protected TDbContext DbContext
