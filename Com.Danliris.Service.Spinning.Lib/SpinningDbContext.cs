@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Com.Moonlay.EntityFrameworkCore;
+﻿using Com.Moonlay.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Com.Danliris.Service.Spinning.Lib.Models;
 using Com.Danliris.Service.Spinning.Lib.Configs;

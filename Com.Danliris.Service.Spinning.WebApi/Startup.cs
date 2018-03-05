@@ -44,18 +44,6 @@ namespace Com.Danliris.Service.Spinning.WebApi
                 .AddTransient<SpinningInputProductionService>()
                 .AddTransient<WinderOutputProductionService>();
 
-
-            //services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
-            //    .AddIdentityServerAuthentication(options =>
-            //    {
-            //        options.ApiName = "com.danliris.service.spinning";
-            //        options.ApiSecret = "secret";
-            //        options.Authority = "https://localhost:44350";
-            //        options.RequireHttpsMetadata = false;
-            //        options.NameClaimType = JwtClaimTypes.Name;
-            //        options.RoleClaimType = JwtClaimTypes.Role;
-            //    });
-
             var Secret = Configuration.GetValue<string>("Secret") ?? Configuration["Secret"];
             var Key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Secret));
 
@@ -66,12 +54,14 @@ namespace Com.Danliris.Service.Spinning.WebApi
                     {
                         ValidateAudience = false,
                         ValidateIssuer = false,
+                        ValidateLifetime = false,
                         IssuerSigningKey = Key
                     };
                 });
 
             services
                 .AddMvcCore()
+                .AddAuthorization()
                 .AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver())
                 .AddJsonFormatters();
 
