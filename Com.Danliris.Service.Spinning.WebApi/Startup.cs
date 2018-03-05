@@ -72,6 +72,7 @@ namespace Com.Danliris.Service.Spinning.WebApi
 
             services
                 .AddMvcCore()
+                .AddAuthorization()
                 .AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver())
                 .AddJsonFormatters();
 

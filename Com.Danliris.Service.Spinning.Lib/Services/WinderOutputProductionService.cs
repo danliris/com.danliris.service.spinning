@@ -150,7 +150,7 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
             model.MachineId = viewModel.Machine._id;
             model.MachineCode = viewModel.Machine.code;
             model.MachineName = viewModel.Machine.name;
-            model.LotYarnId = viewModel.LotYarn.Id != null ? (int)viewModel.LotYarn.Id : 0; ;
+            model.LotYarnId = viewModel.LotYarn.Id != null ? (int)viewModel.LotYarn.Id : 0;
             model.LotYarnCode = viewModel.LotYarn.Code;
             model.LotYarnName = viewModel.LotYarn.Lot;
             model.BadOutput = (double)viewModel.BadOutput;
