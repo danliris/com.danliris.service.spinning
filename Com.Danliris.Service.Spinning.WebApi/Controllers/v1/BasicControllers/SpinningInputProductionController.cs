@@ -4,8 +4,8 @@ using Com.Danliris.Service.Spinning.Lib.Services;
 using Com.Danliris.Service.Spinning.Lib.ViewModels;
 using Com.Danliris.Service.Spinning.WebApi.Helpers;
 using Com.Moonlay.NetCore.Lib.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -17,6 +17,7 @@ namespace Com.Danliris.Service.Spinning.WebApi.Controllers.v1.BasicControllers
     [Produces("application/json")]
     [ApiVersion("1.0")]
     [Route("v{version:apiVersion}/SpinningInputProduction")]
+    [Authorize]
     public class SpinningInputProductionController : BasicController<SpinningDbContext, SpinningInputProductionService, SpinningInputProductionViewModel, SpinningInputProduction>
     {
         private static readonly string ApiVersion = "1.0";

@@ -19,6 +19,8 @@ namespace Com.Danliris.Service.Spinning.Lib.Helpers
         {
         }
 
+        public string Username { get; set; }
+
         public abstract Tuple<List<TModel>, int, Dictionary<string, string>, List<string>> ReadModel(int Page = 1, int Size = 25, string Order = "{}", List<string> Select = null, string Keyword = null, string Filter = "{}");
 
         public virtual async Task<int> CreateModel(TModel Model)

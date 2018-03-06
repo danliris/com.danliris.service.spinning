@@ -82,6 +82,24 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
             while (this.DbSet.Any(d => d.Code.Equals(model.Code)));
 
             base.OnCreating(model);
+            model._CreatedAgent = "Service";
+            model._CreatedBy = this.Username;
+            model._LastModifiedAgent = "Service";
+            model._LastModifiedBy = this.Username;
+        }
+
+        public override void OnUpdating(int id, WinderOutputProduction model)
+        {
+            base.OnUpdating(id, model);
+            model._LastModifiedAgent = "Service";
+            model._LastModifiedBy = this.Username;
+        }
+
+        public override void OnDeleting(WinderOutputProduction model)
+        {
+            base.OnDeleting(model);
+            model._DeletedAgent = "Service";
+            model._DeletedBy = this.Username;
         }
 
         public async Task<int> CreateModels(List<WinderOutputProduction> models)
@@ -150,7 +168,7 @@ namespace Com.Danliris.Service.Spinning.Lib.Services
             model.MachineId = viewModel.Machine._id;
             model.MachineCode = viewModel.Machine.code;
             model.MachineName = viewModel.Machine.name;
-            model.LotYarnId = viewModel.LotYarn.Id != null ? (int)viewModel.LotYarn.Id : 0; ;
+            model.LotYarnId = viewModel.LotYarn.Id != null ? (int)viewModel.LotYarn.Id : 0;
             model.LotYarnCode = viewModel.LotYarn.Code;
             model.LotYarnName = viewModel.LotYarn.Lot;
             model.BadOutput = (double)viewModel.BadOutput;
