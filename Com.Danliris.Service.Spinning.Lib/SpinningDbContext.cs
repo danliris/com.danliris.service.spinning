@@ -15,6 +15,7 @@ namespace Com.Danliris.Service.Spinning.Lib
         public DbSet<LotYarn> LotYarns { get; set; }
         public DbSet<SpinningInputProduction> WinderInputProductions { get; set; }
         public DbSet<WinderOutputProduction> WinderOutputProductions { get; set; }
+        public DbSet<MasterCount> MasterCounts { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -25,6 +26,7 @@ namespace Com.Danliris.Service.Spinning.Lib
             modelBuilder.ApplyConfiguration(new LotYarnConfig());
             modelBuilder.ApplyConfiguration(new SpinningInputProductionConfig());
             modelBuilder.ApplyConfiguration(new WinderOutputProductionConfig());
+            modelBuilder.ApplyConfiguration(new MasterCountConfig());
 
         }
     }
